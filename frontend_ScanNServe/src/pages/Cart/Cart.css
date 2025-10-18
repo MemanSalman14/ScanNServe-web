@@ -1,0 +1,218 @@
+.cart {
+    margin-top: 100px;
+}
+.cart-items-title {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr 0.5fr;
+    align-items: center;
+    color: grey;
+    font-size: max(1vw, 12px);
+}
+/*
+.cart-items-item {
+    margin: 10px 0px;
+    color: black;
+}*/
+.cart-items-item {
+    margin: 10px 0px;
+    color: black;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr 0.5fr;
+    align-items: center;
+    gap: 10px;
+}
+.cart-items-item img {
+    width: 50px;
+}
+.cart hr {
+    height: 1px;
+    background-color: #e2e2e2;
+    border: none;
+}
+/*
+.cart-items-item .cross {
+    cursor: pointer;
+}
+*/
+.cart-items-item .cross {
+    cursor: pointer;
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    padding: 8px 12px;
+    border-radius: 4px;
+    background-color: #fff1f1;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;  /* Center horizontally */
+    width: 100px;            /* Set fixed width */
+    text-align: center;      /* Center text content */
+    margin: 0 auto;          /* Center the entire button */
+}
+.cart-items-item .cross::before {
+    color: #666;
+    font-size: 0.85rem;
+    margin-right: 4px;       /* Add space between text and cross */
+}
+.cart-items-item .cross:hover {
+    background-color: #ffe9e9;
+    color: #ff5252;
+}
+.cart-bottom {
+    margin-top: 80px;
+    display: flex;
+    justify-content: space-between;
+    gap: max(12vw,20px);
+}
+.cart-total {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.cart-total-details {
+    display: flex;
+    justify-content: space-between;
+    color: #555555;
+}
+.cart-total hr {
+    margin: 10px 0px;
+}
+.cart-total button {
+    border: none;
+    color: white;
+    background-color: tomato;
+    width: max(15vw,200px);
+    padding: 12px 0px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.cart-promocode {
+    flex: 1;
+}
+.cart-promocode p{
+    color: #555555;
+}
+.cart-promocode-input{
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #eaeaea;
+    border-radius: 4px;
+}
+.cart-promocode-input input{
+    background: transparent;
+    border: none;
+    outline: none;
+    padding-left: 10px;
+}
+.cart-promocode-input button{
+    width: max(10vw,150px);
+    padding: 12px 5px;
+    background-color: black;
+    border: none;
+    color: white;
+    border-radius: 4px;
+}
+
+@media(max-width:750px) {
+    .cart-bottom {
+        flex-direction: column-reverse;
+    }
+    .cart-promocode{
+        justify-content: start;
+    }
+}
+
+@media (max-width: 768px) {
+    .cart {
+        margin-top: 60px;
+        padding: 0 10px;
+    }
+
+    .cart-items-title,
+    .cart-items-item {
+        grid-template-columns: 0.7fr 1fr 0.7fr 0.7fr 0.7fr 0.5fr;
+        font-size: 14px;
+        gap: 8px;
+    }
+
+    .cart-items-item {
+        margin: 15px 0;
+    }
+
+    .cart-items-item img {
+        width: 45px;
+        height: 45px;
+        object-fit: cover;
+    }
+
+    .cart-items-item .cross {
+        width: 40px;
+        padding: 6px;
+        font-size: 12px;
+    }
+    
+    
+}
+
+@media (max-width: 480px) {
+    .cart {
+        padding: 0 5px;
+    }
+
+    .cart-items-title,
+    .cart-items-item {
+        grid-template-columns: 0.6fr 1fr 0.6fr 0.6fr 0.6fr 0.4fr;
+        font-size: 12px;
+        gap: 4px;
+    }
+
+    .cart-items-item img {
+        width: 35px;
+        height: 35px;
+    }
+
+    .cart-items-item .cross {
+        width: 30px;
+        padding: 4px;
+        font-size: 10px;
+    }
+
+    .cart-bottom {
+        margin-top: 30px;
+        gap: 15px;
+    }
+
+    .cart-promocode-input input {
+        font-size: 12px;
+        width: 100%;
+    }
+
+    .cart-promocode-input button {
+        width: 80px;
+        padding: 8px 4px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 360px) {
+    .cart-items-title,
+    .cart-items-item {
+        font-size: 10px;
+        gap: 2px;
+    }
+
+    .cart-items-item img {
+        width: 30px;
+        height: 30px;
+    }
+
+    .cart-items-item .cross {
+        width: 25px;
+        padding: 3px;
+        font-size: 9px;
+    }
+}
+
