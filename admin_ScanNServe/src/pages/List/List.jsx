@@ -56,7 +56,11 @@ const List = ({url}) => {
         {list.map((item, index) => {
           return (
             <div key={index} className='list-table-format'>
+              {/*
               <img src={`${url}/images/` + item.image} alt="" />
+              */}
+              {/* Displaying image from base64 string */}
+              <img src={`data:image/png;base64,${item.image}`} alt={item.name} style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
               <p>{item.name}</p>
               <p>{item.category}</p>
               <p>₹{item.price}</p>
