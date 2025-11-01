@@ -26,7 +26,12 @@ const Cart = () => {
             return (
               <div key={index}>
                 <div className="cart-items-title cart-items-item">
+                  {/*
                   <img src={url+"/images/"+item.image} alt="" />
+                  */}
+                  
+                  {/* Use base64 image string */}
+                  <img src={`data:image/png;base64,${item.image}`} alt={item.name} />
                   <p>{item.name}</p>
                   <p>₹{item.price}</p>
                   <p>{cartItems[item._id]}</p>
