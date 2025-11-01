@@ -7,7 +7,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 const currency = "inr";
 const deliveryCharge = 10;
-const frontend_url = "http://localhost:5173"
+const frontend_url = "https://scan-n-serve-frontend.vercel.app"
 
 // Placing user order for frontend
 const placeOrder = async (req, res) => {
