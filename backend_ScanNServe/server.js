@@ -21,7 +21,10 @@ app.use(cors())
 
 app.use(express.json({ limit: '10mb' })) // Increase payload size limit
 app.use(cors({
-  origin: 'https://scan-n-serve-frontend.vercel.app', // Allow frontend domain
+  origin: [
+    'https://scan-n-serve-frontend.vercel.app',
+    'https://scan-n-serve-admin.vercel.app'
+  ],
   credentials: true
 }))
 
