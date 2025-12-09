@@ -1,4 +1,4 @@
-# 🍔 ScanNServe - Food Ordering System
+# 🍽️ ScanNServe - Food Ordering System
 
 <div align="center">
 
@@ -10,9 +10,9 @@
 ![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 
-**A modern, full-stack food ordering platform with QR code scanning capabilities**
+**A modern, full-stack food ordering platform to browse, order, and enjoy delicious meals**
 
-[Live Demo](#-live-demo) • [Features](#-features) • [Installation](#-installation--setup) • [API Docs](#-api-endpoints) • [Contributing](#-contributing)
+[🚀 Live Demo](https://scan-n-serve-frontend.vercel.app) • [Features](#-features) • [Installation](#-installation--setup) • [API Docs](#-api-endpoints) 
 
 </div>
 
@@ -28,10 +28,7 @@
 - [Environment Variables](#-environment-variables)
 - [API Endpoints](#-api-endpoints)
 - [Deployment](#-deployment)
-- [Screenshots](#-screenshots)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Contact](#-contact)
+
 
 ---
 
@@ -89,7 +86,7 @@ Vercel (Frontend & Backend) • MongoDB Atlas
 ## 📁 Project Structure
 
 ```
-Deploy_ScanNServe/
+
 │
 ├── 📂 frontend_ScanNServe/          # Customer Application
 │   ├── public/
@@ -290,76 +287,28 @@ PORT=4000
 #### Frontend Deployment
 
 1. Update API URL in `src/context/StoreContext.jsx`
-2. Import project in Vercel
+2. Import project in [Vercel](https://vercel.com/)
 3. Set root directory to `frontend_ScanNServe`
 4. Deploy!
 
 #### Admin Panel Deployment
 
 1. Update API URL in `src/App.jsx`
-2. Import project in Vercel
+2. Import project in [Vercel](https://vercel.com/)
 3. Set root directory to `admin_ScanNServe`
 4. Deploy!
 
 ---
 
-## 📸 Screenshots
 
-<div align="center">
 
-### Home Page
-*Add your screenshot here*
 
-### Menu Page
-*Add your screenshot here*
-
-### Cart Page
-*Add your screenshot here*
-
-### Admin Dashboard
-*Add your screenshot here*
-
-</div>
 
 ---
 
-## 🤝 Contributing
 
-Contributions are what make the open source community amazing! Any contributions you make are **greatly appreciated**.
 
-1. Fork the Project
-2. Create your Feature Branch
-   ```bash
-   git checkout -b feature/AmazingFeature
-   ```
-3. Commit your Changes
-   ```bash
-   git commit -m 'Add some AmazingFeature'
-   ```
-4. Push to the Branch
-   ```bash
-   git push origin feature/AmazingFeature
-   ```
-5. Open a Pull Request
 
----
 
-## 📝 License
 
-Distributed under the **ISC License**. See `LICENSE` for more information.
 
----
-
-## 📧 Contact
-
-**Project Link**: [https://github.com/yourusername/ScanNServe](https://github.com/yourusername/ScanNServe)
-
----
-
-<div align="center">
-
-### ⭐ Star this repo if you find it helpful!
-
-Made with ❤️ by ScanNServe Team
-
-</div>
