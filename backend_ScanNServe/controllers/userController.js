@@ -1,77 +1,50 @@
 import userModel from "../models/userModel.js";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import validator from "validator";
 
-//create token
-const createToken = (id) => {
-    return jwt.sign({id}, process.env.JWT_SECRET)
-}
-
-// login user
-const loginUser = async (req,res) => {
-
-    const {email, password} = req.body
-
-    try{
-        const user = await userModel.findOne({email})
-
-        if(!user){
-            return res.json({ success: false, message: "User Doesn't exist"})
+// Get or create user by Clerk ID (Helper function)
+const getUserByClerkId = async (clerkId) => {
+    try {
+        let user = await userModel.findOne({ clerkId });
+        
+        if (!user) {
+            console.log("User not found in database, creating placeholder:", clerkId);
+            user = new userModel({
+                clerkId,
+                email: `user_${clerkId}@temp.com`,
+                name: 'User',
+                profilePicture: '',
+                cartData: {}
+            });
+            await user.save();
         }
-
-        const isMatch = await bcrypt.compare(password, user.password)
-
-        if(!isMatch){
-            return res.json({ success: false, message: "Invalid credentials"})
-        }
-
-        const token = createToken(user._id)
-        res.json({ success: true, token})
+        
+        return user;
     } catch (error) {
-        console.log(error)
-        res.json({ success: false, message: "Error"}) 
+        console.error("Error getting user by Clerk ID:", error);
+        return null;
     }
 }
 
-//register user
-const registerUser = async (req,res) => {
-
-    const {name, email, password} = req.body
-
-    try{
-        // check if user already exists
-        const exists = await userModel.findOne({email})
-        if(exists){
-            return res.json({ success: false, message: "User already exists"})
+// Get user profile
+const getUserProfile = async (req, res) => {
+    try {
+        const user = await getUserByClerkId(req.body.userId);
+        
+        if (!user) {
+            return res.json({ success: false, message: "User not found" });
         }
 
-        // validating email format & strong password
-        if(!validator.isEmail(email)){
-            return res.json({ success: false, message: "Please enter a valid email"})
-        }
-        if(password.length<8){
-            return res.json({success: false, message: "Please enter a strong password"})
-        }
-
-        // hashing user password
-        const salt = await bcrypt.genSalt(10) // the more number round the more time it will take
-        const hashedPassword = await bcrypt.hash(password, salt)
-
-        const newUser = new userModel({
-            name : name, 
-            email : email, 
-            password: hashedPassword
-        })
-
-        const user = await newUser.save()
-        const token = createToken(user._id)
-        res.json({ success: true, token})
-
-    } catch(error){
-        console.log(error);
-        res.json({ success: false, message: "Error"})
-    } 
+        res.json({ 
+            success: true, 
+            data: {
+                name: user.name,
+                email: user.email,
+                profilePicture: user.profilePicture
+            }
+        });
+    } catch (error) {
+        console.error("Error getting user profile:", error);
+        res.json({ success: false, message: "Error fetching profile" });
+    }
 }
 
-export {loginUser, registerUser}
+export { getUserByClerkId, getUserProfile };
