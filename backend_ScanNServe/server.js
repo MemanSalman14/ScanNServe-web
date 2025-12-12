@@ -34,7 +34,7 @@ app.use(cors())
 */}
 
 app.use(express.json({ limit: '10mb' })) // Increase payload size limit
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
 
 app.use(cors({
   origin: [
@@ -61,7 +61,7 @@ app.use("/images",express.static('uploads'))
 app.use("/api/user", userRouter)
 app.use("/api/cart", cartRouter)
 app.use("/api/order",orderRouter)
-app.use("/uploads", express.static('uploads'))
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

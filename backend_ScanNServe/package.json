@@ -11,7 +11,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "@clerk/clerk-sdk-node": "^5.0.0",
+    "@clerk/clerk-sdk-node": "^5.1.6",
     "@clerk/express": "^1.7.57",
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
