@@ -1,19 +1,42 @@
-import jwt from 'jsonwebtoken'
+import { clerkClient } from '@clerk/clerk-sdk-node';
 
 const authMiddleware = async (req, res, next) => {
-    const { token } = req.headers
-    if (!token) {
-        return res.json({ success: false, message: 'Not Authorized Login Again'})
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.json({ 
+            success: false, 
+            message: "Not Authorized. Login Again" 
+        });
     }
+
+    const token = authHeader.split(' ')[1];
+
     try {
-        const token_decode =  jwt.verify(token, process.env.JWT_SECRET)
-       /* req.body.userId = token_decode.id */
-        req.userId = token_decode.id 
-        next()
+        // Verify the Clerk session token
+        const session = await clerkClient.sessions.verifyToken(token, {
+            jwtKey: process.env.CLERK_SECRET_KEY
+        });
+        
+        if (!session || !session.userId) {
+            return res.json({ 
+                success: false, 
+                message: "Invalid or expired token" 
+            });
+        }
+
+        // Attach userId to request body
+        req.body.userId = session.userId;
+        req.clerkUserId = session.userId;
+        
+        next();
     } catch (error) {
-        console.log(error)
-        return res.json({ success: false, message: "Error"})
+        console.error("Auth middleware error:", error);
+        res.json({ 
+            success: false, 
+            message: "Authentication failed" 
+        });
     }
 }
 
-export default authMiddleware
+export default authMiddleware;
