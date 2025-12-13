@@ -5,6 +5,9 @@ import { getUserByClerkId } from "./userController.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
+const currency = "inr";
+const deliveryCharge = 10;
+
 // placing user order for frontend
 const placeOrder = async (req, res) => {
 
@@ -28,22 +31,22 @@ const placeOrder = async (req, res) => {
 
         const line_items = req.body.items.map((item) => ({
             price_data: {
-                currency: "inr",
+                currency: currency,
                 product_data: {
                     name: item.name
                 },
-                unit_amount: item.price * 100 * 80
+                unit_amount: item.price * 100 
             },
             quantity: item.quantity
         }))
 
         line_items.push({
             price_data: {
-                currency: "inr",
+                currency: currency,
                 product_data: {
                     name: "Delivery Charges"
                 },
-                unit_amount: 2 * 100 * 80
+                unit_amount: deliveryCharge * 100 
             },
             quantity: 1
         })

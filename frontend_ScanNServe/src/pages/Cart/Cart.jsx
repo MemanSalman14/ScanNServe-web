@@ -31,9 +31,9 @@ const Cart = () => {
                   {/* Use base64 image string */}
                   <img src={`data:image/png;base64,${item.image}`} alt={item.name} />
                   <p>{item.name}</p>
-                  <p>${item.price}</p>
+                  <p>₹{item.price}</p>
                   <p>{cartItems[item._id]}</p>
-                  <p>${item.price * cartItems[item._id]}</p>
+                  <p>₹{item.price * cartItems[item._id]}</p>
                   <p onClick={() => removeFromCart(item._id)} className='cross'>x</p>
                 </div>
                 <hr />
@@ -48,17 +48,17 @@ const Cart = () => {
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
-              <p>${getTotalCartAmount()}</p>
+              <p>₹{getTotalCartAmount()}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>${getTotalCartAmount() === 0 ? 0 : 2}</p>
+              <p>₹{getTotalCartAmount() === 0 ? 0 : 10}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>${getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}</b>
+              <b>₹{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 10}</b>
             </div>
           </div>
           <button onClick={() => isSignedIn ? navigate('/order') : navigate('/')}>PROCEED TO CHECKOUT</button>
