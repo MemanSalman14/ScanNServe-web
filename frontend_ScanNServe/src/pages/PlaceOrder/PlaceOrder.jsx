@@ -25,6 +25,8 @@ const PlaceOrder = () => {
     phone: ""
   })
 
+  const [paymentMethod, setPaymentMethod] = useState("COD"); // Default to COD
+
   useEffect(() => {
     if (user) {
       setData(prevData => ({
@@ -58,19 +60,36 @@ const PlaceOrder = () => {
       address: data,
       items: orderItems,
       amount: getTotalCartAmount() + 10,
+      paymentMethod: paymentMethod
     }
     
     try {
       const token = await getToken();
-      let response = await axios.post(url + "/api/order/place", orderData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
       
-      if (response.data.success) {
-        const { session_url } = response.data;
-        window.location.replace(session_url);
+      if (paymentMethod === "COD") {
+        // Place COD order directly
+        let response = await axios.post(url + "/api/order/place-cod", orderData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (response.data.success) {
+          toast.success("Order placed successfully!");
+          navigate('/myorders');
+        } else {
+          toast.error("Error placing order");
+        }
       } else {
-        toast.error("Error placing order");
+        // Stripe payment
+        let response = await axios.post(url + "/api/order/place", orderData, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        
+        if (response.data.success) {
+          const { session_url } = response.data;
+          window.location.replace(session_url);
+        } else {
+          toast.error("Error placing order");
+        }
       }
     } catch (error) {
       console.error("Error placing order:", error);
@@ -125,7 +144,37 @@ const PlaceOrder = () => {
               <b>₹{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 10}</b>
             </div>
           </div>
-          <button type='submit'>PROCEED TO PAYMENT</button>
+          
+          {/* Payment Method Selection */}
+          <div className="payment-method">
+            <h3>Payment Method</h3>
+            <div className="payment-options">
+              <label className="payment-option">
+                <input 
+                  type="radio" 
+                  name="payment" 
+                  value="COD" 
+                  checked={paymentMethod === "COD"}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <span>Cash on Delivery (COD)</span>
+              </label>
+              <label className="payment-option">
+                <input 
+                  type="radio" 
+                  name="payment" 
+                  value="Stripe" 
+                  checked={paymentMethod === "Stripe"}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                />
+                <span>Pay Online (Card/UPI)</span>
+              </label>
+            </div>
+          </div>
+          
+          <button type='submit'>
+            {paymentMethod === "COD" ? "PLACE ORDER" : "PROCEED TO PAYMENT"}
+          </button>
         </div>
       </div>
     </form>

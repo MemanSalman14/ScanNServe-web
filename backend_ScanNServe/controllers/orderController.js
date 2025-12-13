@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 const currency = "inr";
 const deliveryCharge = 10;
 
-// placing user order for frontend
+// placing user order for frontend (Stripe Payment)
 const placeOrder = async (req, res) => {
 
     const frontend_url = "https://scan-n-serve-frontend.vercel.app"
@@ -24,7 +24,9 @@ const placeOrder = async (req, res) => {
             userId: userData._id,
             items: req.body.items,
             amount: req.body.amount,
-            address: req.body.address
+            address: req.body.address,
+            payment: false,
+            paymentMethod: "Stripe"
         })
         await newOrder.save();
         await userModel.findByIdAndUpdate(userData._id, { cartData: {} });
@@ -35,7 +37,7 @@ const placeOrder = async (req, res) => {
                 product_data: {
                     name: item.name
                 },
-                unit_amount: item.price * 100 
+                unit_amount: item.price * 100
             },
             quantity: item.quantity
         }))
@@ -46,7 +48,7 @@ const placeOrder = async (req, res) => {
                 product_data: {
                     name: "Delivery Charges"
                 },
-                unit_amount: deliveryCharge * 100 
+                unit_amount: deliveryCharge * 100
             },
             quantity: 1
         })
@@ -63,6 +65,39 @@ const placeOrder = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: "Error" })
+    }
+}
+
+// placing COD order
+const placeCODOrder = async (req, res) => {
+    try {
+        const userData = await getUserByClerkId(req.body.userId);
+        
+        if (!userData) {
+            return res.json({ success: false, message: "User not found" });
+        }
+        
+        const newOrder = new orderModel({
+            userId: userData._id,
+            items: req.body.items,
+            amount: req.body.amount,
+            address: req.body.address,
+            payment: false,
+            paymentMethod: "COD"
+        })
+        
+        await newOrder.save();
+        await userModel.findByIdAndUpdate(userData._id, { cartData: {} });
+
+        res.json({ 
+            success: true, 
+            message: "Order placed successfully with COD",
+            orderId: newOrder._id
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: "Error placing COD order" })
     }
 }
 
@@ -121,4 +156,4 @@ const updateStatus = async (req, res) => {
     }
 }
 
-export { placeOrder, verifyOrder, userOrders, listOrders, updateStatus }
+export { placeOrder, placeCODOrder, verifyOrder, userOrders, listOrders, updateStatus }

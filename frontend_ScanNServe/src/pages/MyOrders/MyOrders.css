@@ -35,6 +35,28 @@
     cursor: pointer;
     color: #454545;
 }
+
+
+.payment-badge {
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.payment-badge.cod {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffc107;
+}
+
+.payment-badge.online {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #28a745;
+}
 @media (max-width:900px) {
     .my-orders-order{
         grid-template-columns: 1fr 2fr 1fr;
