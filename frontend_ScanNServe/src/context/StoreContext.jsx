@@ -8,8 +8,9 @@ const StoreContextProvider = (props) => {
     const [cartItems, setCartItems] = useState({});
     const url = "https://scan-n-serve-backend.vercel.app";
     const [food_list, setFoodList] = useState([]);
+    const [loading, setLoading] = useState(true);
     
-    const { getToken, isSignedIn } = useAuth();
+    const { getToken, isSignedIn, isLoaded } = useAuth();
     const { user } = useUser();
 
     // Add item to cart
@@ -73,31 +74,68 @@ const StoreContextProvider = (props) => {
     };
 
     // Load cart data from backend
-    const loadCartData = async () => {
-        if (isSignedIn) {
-            try {
-                const token = await getToken();
-                const response = await axios.post(url + "/api/cart/get", {}, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
-                setCartItems(response.data.cartData || {});
-            } catch (error) {
-                console.error("Error loading cart:", error);
-            }
+    const loadCartData = async (token) => {
+        try {
+            const response = await axios.post(url + "/api/cart/get", {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setCartItems(response.data.cartData || {});
+        } catch (error) {
+            console.error("Error loading cart:", error);
+            setCartItems({});
         }
     };
 
+    // Load data on mount and when auth state changes
     useEffect(() => {
         async function loadData() {
+            setLoading(true);
+            
+            // Always fetch food list
             await fetchFoodList();
-            if (isSignedIn) {
-                await loadCartData();
-            } else {
-                setCartItems({});
+            
+            // Wait for Clerk to load
+            if (!isLoaded) {
+                setLoading(false);
+                return;
             }
+            
+            // Load cart if user is signed in
+            if (isSignedIn) {
+                try {
+                    const token = await getToken();
+                    await loadCartData(token);
+                } catch (error) {
+                    console.error("Error loading user cart:", error);
+                    setCartItems({});
+                }
+            } else {
+                // Load cart from localStorage for non-signed in users
+                const localCart = localStorage.getItem('guestCart');
+                if (localCart) {
+                    try {
+                        setCartItems(JSON.parse(localCart));
+                    } catch (error) {
+                        console.error("Error parsing local cart:", error);
+                        setCartItems({});
+                    }
+                } else {
+                    setCartItems({});
+                }
+            }
+            
+            setLoading(false);
         }
+        
         loadData();
-    }, [isSignedIn]);
+    }, [isSignedIn, isLoaded]);
+
+    // Save guest cart to localStorage when not signed in
+    useEffect(() => {
+        if (!isSignedIn && !loading) {
+            localStorage.setItem('guestCart', JSON.stringify(cartItems));
+        }
+    }, [cartItems, isSignedIn, loading]);
 
     const contextValue = {
         food_list,
@@ -108,7 +146,8 @@ const StoreContextProvider = (props) => {
         getTotalCartAmount,
         url,
         isSignedIn,
-        user
+        user,
+        loading
     };
 
     return (
