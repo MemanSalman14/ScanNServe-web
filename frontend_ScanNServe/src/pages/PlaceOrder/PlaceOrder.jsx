@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 const PlaceOrder = () => {
 
-  const { getTotalCartAmount, food_list, cartItems, url } = useContext(StoreContext);
+  const { getTotalCartAmount, food_list, cartItems, url, clearCart } = useContext(StoreContext);
   const { getToken, isSignedIn } = useAuth();
   const { user } = useUser();
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const PlaceOrder = () => {
     phone: ""
   })
 
-  const [paymentMethod, setPaymentMethod] = useState("COD"); // Default to COD
+  const [paymentMethod, setPaymentMethod] = useState("COD");
 
   useEffect(() => {
     if (user) {
@@ -73,6 +73,7 @@ const PlaceOrder = () => {
         });
         
         if (response.data.success) {
+          clearCart(); // Clear cart immediately
           toast.success("Order placed successfully!");
           navigate('/myorders');
         } else {
