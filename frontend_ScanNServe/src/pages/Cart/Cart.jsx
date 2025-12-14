@@ -10,6 +10,10 @@ const Cart = () => {
   const { isSignedIn } = useAuth();
   const navigate = useNavigate();
 
+  const subtotal = getTotalCartAmount();
+  const gst = Math.round(subtotal * 0.05);
+  const total = subtotal + gst;
+
   return (
     <div className='cart'>
       <div className="cart-items">
@@ -28,7 +32,6 @@ const Cart = () => {
             return (
               <div key={index}>
                 <div className="cart-items-title cart-items-item">
-                  {/* Use base64 image string */}
                   <img src={`data:image/png;base64,${item.image}`} alt={item.name} />
                   <p>{item.name}</p>
                   <p>₹{item.price}</p>
@@ -48,20 +51,22 @@ const Cart = () => {
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
-              <p>₹{getTotalCartAmount()}</p>
+              <p>₹{subtotal}</p>
             </div>
             <hr />
             <div className="cart-total-details">
-              <p>Delivery Fee</p>
-              <p>₹{getTotalCartAmount() === 0 ? 0 : 10}</p>
+              <p>GST (5%)</p>
+              <p>₹{subtotal === 0 ? 0 : gst}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>₹{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 10}</b>
+              <b>₹{subtotal === 0 ? 0 : total}</b>
             </div>
           </div>
-          <button onClick={() => isSignedIn ? navigate('/order') : navigate('/')}>PROCEED TO CHECKOUT</button>
+          <button onClick={() => isSignedIn ? navigate('/order') : navigate('/')}>
+            🍴 PROCEED TO ORDER
+          </button>
         </div>
         <div className="cart-promocode">
           <div>

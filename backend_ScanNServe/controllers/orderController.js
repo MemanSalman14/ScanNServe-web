@@ -5,12 +5,56 @@ import { getUserByClerkId } from "./userController.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
-const currency = "inr";
-const deliveryCharge = 10;
+// Generate unique order number
+const generateOrderNumber = () => {
+    const timestamp = Date.now().toString().slice(-6);
+    const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+    return `ORD${timestamp}${random}`;
+}
 
-// placing user order for frontend (Stripe Payment)
-const placeOrder = async (req, res) => {
+// Place Dine-In order (Pay at Counter)
+const placeDineInOrder = async (req, res) => {
+    try {
+        const userData = await getUserByClerkId(req.body.userId);
+        
+        if (!userData) {
+            return res.json({ success: false, message: "User not found" });
+        }
 
+        const orderNumber = generateOrderNumber();
+        
+        const newOrder = new orderModel({
+            userId: userData._id,
+            orderNumber: orderNumber,
+            items: req.body.items,
+            amount: req.body.amount,
+            tableNumber: req.body.tableNumber,
+            customerName: req.body.customerName,
+            phone: req.body.phone,
+            specialInstructions: req.body.specialInstructions || "",
+            orderType: "Dine-In",
+            paymentMethod: "PayAtCounter",
+            payment: false
+        })
+        
+        await newOrder.save();
+        await userModel.findByIdAndUpdate(userData._id, { cartData: {} });
+
+        res.json({ 
+            success: true, 
+            message: "Order placed successfully",
+            orderNumber: orderNumber,
+            orderId: newOrder._id
+        })
+
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: "Error placing order" })
+    }
+}
+
+// Place online payment order (Stripe)
+const placeOnlineOrder = async (req, res) => {
     const frontend_url = "https://scan-n-serve-frontend.vercel.app"
 
     try {
@@ -19,21 +63,29 @@ const placeOrder = async (req, res) => {
         if (!userData) {
             return res.json({ success: false, message: "User not found" });
         }
+
+        const orderNumber = generateOrderNumber();
         
         const newOrder = new orderModel({
             userId: userData._id,
+            orderNumber: orderNumber,
             items: req.body.items,
             amount: req.body.amount,
-            address: req.body.address,
-            payment: false,
-            paymentMethod: "Stripe"
+            tableNumber: req.body.tableNumber,
+            customerName: req.body.customerName,
+            phone: req.body.phone,
+            specialInstructions: req.body.specialInstructions || "",
+            orderType: "Dine-In",
+            paymentMethod: "PayNow",
+            payment: false
         })
+        
         await newOrder.save();
         await userModel.findByIdAndUpdate(userData._id, { cartData: {} });
 
         const line_items = req.body.items.map((item) => ({
             price_data: {
-                currency: currency,
+                currency: "inr",
                 product_data: {
                     name: item.name
                 },
@@ -42,13 +94,15 @@ const placeOrder = async (req, res) => {
             quantity: item.quantity
         }))
 
+        // Add GST
+        const gstAmount = Math.round(req.body.amount * 0.05);
         line_items.push({
             price_data: {
-                currency: currency,
+                currency: "inr",
                 product_data: {
-                    name: "Delivery Charges"
+                    name: "GST (5%)"
                 },
-                unit_amount: deliveryCharge * 100
+                unit_amount: gstAmount * 100
             },
             quantity: 1
         })
@@ -68,39 +122,6 @@ const placeOrder = async (req, res) => {
     }
 }
 
-// placing COD order
-const placeCODOrder = async (req, res) => {
-    try {
-        const userData = await getUserByClerkId(req.body.userId);
-        
-        if (!userData) {
-            return res.json({ success: false, message: "User not found" });
-        }
-        
-        const newOrder = new orderModel({
-            userId: userData._id,
-            items: req.body.items,
-            amount: req.body.amount,
-            address: req.body.address,
-            payment: false,
-            paymentMethod: "COD"
-        })
-        
-        await newOrder.save();
-        await userModel.findByIdAndUpdate(userData._id, { cartData: {} });
-
-        res.json({ 
-            success: true, 
-            message: "Order placed successfully with COD",
-            orderId: newOrder._id
-        })
-
-    } catch (error) {
-        console.log(error);
-        res.json({ success: false, message: "Error placing COD order" })
-    }
-}
-
 const verifyOrder = async (req, res) => {
     const { orderId, success } = req.body;
     try {
@@ -117,7 +138,7 @@ const verifyOrder = async (req, res) => {
     }
 }
 
-// user orders for frontend
+// user orders
 const userOrders = async (req, res) => {
     try {
         const userData = await getUserByClerkId(req.body.userId);
@@ -126,7 +147,7 @@ const userOrders = async (req, res) => {
             return res.json({ success: false, message: "User not found" });
         }
         
-        const orders = await orderModel.find({ userId: userData._id });
+        const orders = await orderModel.find({ userId: userData._id }).sort({ date: -1 });
         res.json({ success: true, data: orders })
     } catch (error) {
         console.log(error);
@@ -134,10 +155,10 @@ const userOrders = async (req, res) => {
     }
 }
 
-// Listing orders for admin panel
+// Admin: List all orders
 const listOrders = async (req, res) => {
     try {
-        const orders = await orderModel.find({});
+        const orders = await orderModel.find({}).sort({ date: -1 });
         res.json({ success: true, data: orders })
     } catch (error) {
         console.log(error);
@@ -145,7 +166,7 @@ const listOrders = async (req, res) => {
     }
 }
 
-// api for updating order status
+// Admin: Update order status
 const updateStatus = async (req, res) => {
     try {
         await orderModel.findByIdAndUpdate(req.body.orderId, { status: req.body.status });
@@ -156,4 +177,4 @@ const updateStatus = async (req, res) => {
     }
 }
 
-export { placeOrder, placeCODOrder, verifyOrder, userOrders, listOrders, updateStatus }
+export { placeDineInOrder, placeOnlineOrder, verifyOrder, userOrders, listOrders, updateStatus }

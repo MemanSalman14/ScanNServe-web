@@ -14,26 +14,20 @@ const PlaceOrder = () => {
   const navigate = useNavigate();
 
   const [data, setData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    street: "",
-    city: "",
-    state: "",
-    zipcode: "",
-    country: "",
-    phone: ""
+    tableNumber: "",
+    customerName: "",
+    phone: "",
+    specialInstructions: ""
   })
 
-  const [paymentMethod, setPaymentMethod] = useState("COD");
+  const [paymentMethod, setPaymentMethod] = useState("PayAtCounter");
 
   useEffect(() => {
     if (user) {
       setData(prevData => ({
         ...prevData,
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-        email: user.primaryEmailAddress?.emailAddress || ""
+        customerName: user.fullName || `${user.firstName} ${user.lastName}`.trim() || "",
+        phone: user.phoneNumbers?.[0]?.phoneNumber || ""
       }));
     }
   }, [user]);
@@ -47,6 +41,11 @@ const PlaceOrder = () => {
   const placeOrder = async (event) => {
     event.preventDefault();
     
+    if (!data.tableNumber) {
+      toast.error("Please enter your table number");
+      return;
+    }
+    
     let orderItems = [];
     food_list.map((item) => {
       if (cartItems[item._id] > 0) {
@@ -57,31 +56,34 @@ const PlaceOrder = () => {
     })
     
     let orderData = {
-      address: data,
+      tableNumber: data.tableNumber,
+      customerName: data.customerName,
+      phone: data.phone,
+      specialInstructions: data.specialInstructions,
       items: orderItems,
-      amount: getTotalCartAmount() + 10,
-      paymentMethod: paymentMethod
+      amount: getTotalCartAmount(),
+      paymentMethod: paymentMethod,
+      orderType: "Dine-In"
     }
     
     try {
       const token = await getToken();
       
-      if (paymentMethod === "COD") {
-        // Place COD order directly
-        let response = await axios.post(url + "/api/order/place-cod", orderData, {
+      if (paymentMethod === "PayAtCounter") {
+        let response = await axios.post(url + "/api/order/place-dinein", orderData, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
         if (response.data.success) {
-          clearCart(); // Clear cart immediately
-          toast.success("Order placed successfully!");
+          clearCart();
+          toast.success("Order placed successfully! Your order number is " + response.data.orderNumber);
           navigate('/myorders');
         } else {
           toast.error("Error placing order");
         }
       } else {
-        // Stripe payment
-        let response = await axios.post(url + "/api/order/place", orderData, {
+        // Online payment (Stripe/UPI)
+        let response = await axios.post(url + "/api/order/place-online", orderData, {
           headers: { Authorization: `Bearer ${token}` }
         });
         
@@ -109,26 +111,60 @@ const PlaceOrder = () => {
   return (
     <form onSubmit={placeOrder} className='place-order'>
       <div className="place-order-left">
-        <p className="title">Delivery Information</p>
-        <div className="multi-fields">
-          <input required name='firstName' onChange={onChangeHandler} value={data.firstName} type="text" placeholder='First name' />
-          <input required name='lastName' onChange={onChangeHandler} value={data.lastName} type="text" placeholder='Last name' />
+        <p className="title">🍽️ Dine-In Details</p>
+        
+        <div className="table-number-input">
+          <label htmlFor="tableNumber">Table Number *</label>
+          <input 
+            required 
+            name='tableNumber' 
+            onChange={onChangeHandler} 
+            value={data.tableNumber} 
+            type="text" 
+            placeholder='Enter your table number' 
+            className='table-input'
+          />
         </div>
-        <input required name='email' onChange={onChangeHandler} value={data.email} type="email" placeholder='Email address' />
-        <input required name='street' onChange={onChangeHandler} value={data.street} type="text" placeholder='Street' />
-        <div className="multi-fields">
-          <input required name='city' onChange={onChangeHandler} value={data.city} type="text" placeholder='City' />
-          <input required name='state' onChange={onChangeHandler} value={data.state} type="text" placeholder='State' />
+
+        <div className="customer-info">
+          <label htmlFor="customerName">Your Name</label>
+          <input 
+            required 
+            name='customerName' 
+            onChange={onChangeHandler} 
+            value={data.customerName} 
+            type="text" 
+            placeholder='Your name' 
+          />
         </div>
-        <div className="multi-fields">
-          <input required name='zipcode' onChange={onChangeHandler} value={data.zipcode} type="text" placeholder='Zip code' />
-          <input required name='country' onChange={onChangeHandler} value={data.country} type="text" placeholder='Country' />
+
+        <div className="customer-info">
+          <label htmlFor="phone">Phone Number</label>
+          <input 
+            required 
+            name='phone' 
+            onChange={onChangeHandler} 
+            value={data.phone} 
+            type="tel" 
+            placeholder='Phone number' 
+          />
         </div>
-        <input required name='phone' onChange={onChangeHandler} value={data.phone} type="text" placeholder='Phone' />
+
+        <div className="special-instructions">
+          <label htmlFor="specialInstructions">Special Instructions (Optional)</label>
+          <textarea 
+            name='specialInstructions' 
+            onChange={onChangeHandler} 
+            value={data.specialInstructions} 
+            rows="4"
+            placeholder='Any dietary restrictions or special requests...'
+          />
+        </div>
       </div>
+
       <div className="place-order-right">
         <div className="cart-total">
-          <h2>Cart Totals</h2>
+          <h2>Order Summary</h2>
           <div>
             <div className="cart-total-details">
               <p>Subtotal</p>
@@ -136,13 +172,13 @@ const PlaceOrder = () => {
             </div>
             <hr />
             <div className="cart-total-details">
-              <p>Delivery Fee</p>
-              <p>₹{getTotalCartAmount() === 0 ? 0 : 10}</p>
+              <p>GST (5%)</p>
+              <p>₹{Math.round(getTotalCartAmount() * 0.05)}</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <b>Total</b>
-              <b>₹{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 10}</b>
+              <b>₹{getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + Math.round(getTotalCartAmount() * 0.05)}</b>
             </div>
           </div>
           
@@ -154,27 +190,27 @@ const PlaceOrder = () => {
                 <input 
                   type="radio" 
                   name="payment" 
-                  value="COD" 
-                  checked={paymentMethod === "COD"}
+                  value="PayAtCounter" 
+                  checked={paymentMethod === "PayAtCounter"}
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 />
-                <span>Cash on Delivery (COD)</span>
+                <span>💵 Pay at Counter</span>
               </label>
               <label className="payment-option">
                 <input 
                   type="radio" 
                   name="payment" 
-                  value="Stripe" 
-                  checked={paymentMethod === "Stripe"}
+                  value="PayNow" 
+                  checked={paymentMethod === "PayNow"}
                   onChange={(e) => setPaymentMethod(e.target.value)}
                 />
-                <span>Pay Online (Card/UPI)</span>
+                <span>💳 Pay Now (Online)</span>
               </label>
             </div>
           </div>
           
-          <button type='submit'>
-            {paymentMethod === "COD" ? "PLACE ORDER" : "PROCEED TO PAYMENT"}
+          <button type='submit' className='place-order-btn'>
+            {paymentMethod === "PayAtCounter" ? "🍴 PLACE ORDER" : "💳 PAY & ORDER"}
           </button>
         </div>
       </div>

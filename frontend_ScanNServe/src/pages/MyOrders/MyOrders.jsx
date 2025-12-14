@@ -36,22 +36,37 @@ const MyOrders = () => {
         {data.map((order, index) => {
           return (
             <div key={index} className='my-orders-order'>
-              <img src={assets.parcel_icon} alt="" />
-              <p>{order.items.map((item, index) => {
-                if (index === order.items.length - 1) {
-                  return item.name + " x " + item.quantity
-                }
-                else {
-                  return item.name + " x " + item.quantity + ", "
-                }
-              })}</p>
-              <p>₹{order.amount}.00</p>
-              <p>Items: {order.items.length}</p>
-              <p><span>&#x25cf;</span> <b>{order.status}</b></p>
-              <p className={`payment-badge ${order.paymentMethod === 'COD' ? 'cod' : 'online'}`}>
-                {order.paymentMethod === 'COD' ? '💵 COD' : '💳 Paid Online'}
-              </p>
-              <button onClick={fetchOrders}>Track Order</button>
+              <div className="order-header">
+                <img src={assets.parcel_icon} alt="" />
+                <div className="order-info">
+                  <h3>Order #{order.orderNumber}</h3>
+                  <p className="table-info">🪑 Table {order.tableNumber}</p>
+                </div>
+              </div>
+              
+              <div className="order-items">
+                <p>{order.items.map((item, index) => {
+                  if (index === order.items.length - 1) {
+                    return item.name + " x " + item.quantity
+                  } else {
+                    return item.name + " x " + item.quantity + ", "
+                  }
+                })}</p>
+              </div>
+
+              <div className="order-details">
+                <p className="order-amount">₹{order.amount}</p>
+                <p className="order-items-count">{order.items.length} Items</p>
+                <p className="order-status">
+                  <span className={`status-dot ${order.status.toLowerCase().replace(/\s/g, '-')}`}>●</span>
+                  <b>{order.status}</b>
+                </p>
+                <p className={`payment-badge ${order.paymentMethod === 'PayAtCounter' ? 'counter' : 'online'}`}>
+                  {order.paymentMethod === 'PayAtCounter' ? '💵 Pay at Counter' : '💳 Paid Online'}
+                </p>
+              </div>
+              
+              <button onClick={fetchOrders} className="refresh-btn">🔄 Refresh Status</button>
             </div>
           )
         })}
