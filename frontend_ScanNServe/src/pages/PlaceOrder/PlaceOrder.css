@@ -190,6 +190,18 @@
     box-shadow: 0 4px 12px rgba(255, 99, 71, 0.3);
 }
 
+.scanned-note {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #28a745;
+    font-weight: 600;
+}
+
+.table-input[readonly] {
+    background-color: #e8f5e9;
+    cursor: not-allowed;
+}
+
 @media (max-width: 750px) {
     .place-order {
         flex-direction: column;

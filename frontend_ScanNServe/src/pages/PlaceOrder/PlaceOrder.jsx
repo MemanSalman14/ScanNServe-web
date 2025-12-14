@@ -22,12 +22,22 @@ const PlaceOrder = () => {
 
   const [paymentMethod, setPaymentMethod] = useState("PayAtCounter");
 
+  // Auto-fill data from QR scan and user profile
   useEffect(() => {
+    // Get table number from QR scan
+    const scannedTable = localStorage.getItem('scannedTable')
+    
     if (user) {
       setData(prevData => ({
         ...prevData,
-        customerName: user.fullName || `${user.firstName} ${user.lastName}`.trim() || "",
-        phone: user.phoneNumbers?.[0]?.phoneNumber || ""
+        tableNumber: scannedTable || prevData.tableNumber,
+        customerName: user.fullName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || "",
+        phone: user.primaryPhoneNumber?.phoneNumber || user.phoneNumbers?.[0]?.phoneNumber || ""
+      }));
+    } else if (scannedTable) {
+      setData(prevData => ({
+        ...prevData,
+        tableNumber: scannedTable
       }));
     }
   }, [user]);
@@ -76,7 +86,9 @@ const PlaceOrder = () => {
         
         if (response.data.success) {
           clearCart();
-          toast.success("Order placed successfully! Your order number is " + response.data.orderNumber);
+          // Clear scanned table after order
+          localStorage.removeItem('scannedTable');
+          toast.success(`Order #${response.data.orderNumber} placed successfully!`);
           navigate('/myorders');
         } else {
           toast.error("Error placing order");
@@ -123,11 +135,15 @@ const PlaceOrder = () => {
             type="text" 
             placeholder='Enter your table number' 
             className='table-input'
+            readOnly={!!localStorage.getItem('scannedTable')}
           />
+          {localStorage.getItem('scannedTable') && (
+            <p className="scanned-note">✓ Table number from QR scan</p>
+          )}
         </div>
 
         <div className="customer-info">
-          <label htmlFor="customerName">Your Name</label>
+          <label htmlFor="customerName">Your Name *</label>
           <input 
             required 
             name='customerName' 
@@ -139,7 +155,7 @@ const PlaceOrder = () => {
         </div>
 
         <div className="customer-info">
-          <label htmlFor="phone">Phone Number</label>
+          <label htmlFor="phone">Phone Number *</label>
           <input 
             required 
             name='phone' 
