@@ -1,14 +1,51 @@
-.navbar{
+.navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 4%;
+    padding: 20px 5%;
+    background-color: white;
 }
-.navbar .logo{
-   /* width: max(10%,80px); */
-   width: max(15%,120px);
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
-.navbar .profile{
-   /* width: 40px; */
-   width: 60px;
+
+.navbar .logo {
+    width: 150px;
+}
+
+.navbar-left h1 {
+    font-size: 24px;
+    color: #262626;
+    margin: 0;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.admin-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.admin-info span {
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+}
+
+@media (max-width: 768px) {
+    .navbar-left h1 {
+        display: none;
+    }
+
+    .admin-info span {
+        display: none;
+    }
 }
