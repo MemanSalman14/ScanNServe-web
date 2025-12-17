@@ -10,7 +10,6 @@ const Navbar = () => {
     <div className='navbar'>
       <div className='navbar-left'>
         <img className='logo' src={assets.logo} alt="" />
-        <h1>Admin Panel</h1>
       </div>
       <div className='navbar-right'>
         {user && (

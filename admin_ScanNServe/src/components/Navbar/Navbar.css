@@ -16,11 +16,7 @@
     width: 150px;
 }
 
-.navbar-left h1 {
-    font-size: 24px;
-    color: #262626;
-    margin: 0;
-}
+
 
 .navbar-right {
     display: flex;
