@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react'
 import './QRGenerator.css'
 import axios from 'axios'
 import { toast } from 'react-toastify'
-import { useAuth } from '@clerk/clerk-react'
 
 const QRGenerator = ({ url }) => {
-    const { getToken } = useAuth()
-
     const [tableNumber, setTableNumber] = useState('')
     const [tables, setTables] = useState([])
     const [loading, setLoading] = useState(false)
@@ -14,21 +11,12 @@ const QRGenerator = ({ url }) => {
     // Fetch all tables
     const fetchTables = async () => {
         try {
-            // Get Clerk token
-            const token = await getToken()
-
-            const response = await axios.get(`${url}/api/table/list`, {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            })
-
+            const response = await axios.get(url + "/api/table/list")
             if (response.data.success) {
                 setTables(response.data.data)
             }
         } catch (error) {
             console.error("Error fetching tables:", error)
-            toast.error("Error fetching tables")
         }
     }
 
@@ -47,17 +35,9 @@ const QRGenerator = ({ url }) => {
 
         setLoading(true)
         try {
-            // Get Clerk token
-            const token = await getToken()
-
-            const response = await axios.post(`${url}/api/table/generate`, 
-                { tableNumber },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            )
+            const response = await axios.post(url + "/api/table/generate", { 
+                tableNumber 
+            })
 
             if (response.data.success) {
                 toast.success("QR code generated successfully!")
@@ -85,23 +65,13 @@ const QRGenerator = ({ url }) => {
     const deleteTable = async (tableId) => {
         if (window.confirm("Are you sure you want to delete this table?")) {
             try {
-                // Get Clerk token
-                const token = await getToken()
-
-                const response = await axios.post(`${url}/api/table/delete`, 
-                    { tableId },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                )
+                const response = await axios.post(url + "/api/table/delete", { 
+                    tableId 
+                })
                 
                 if (response.data.success) {
                     toast.success("Table deleted successfully")
                     fetchTables()
-                } else {
-                    toast.error("Error deleting table")
                 }
             } catch (error) {
                 console.error("Error deleting table:", error)
@@ -113,26 +83,14 @@ const QRGenerator = ({ url }) => {
     // Toggle table status
     const toggleTableStatus = async (tableId, currentStatus) => {
         try {
-            // Get Clerk token
-            const token = await getToken()
-
-            const response = await axios.post(`${url}/api/table/update-status`, 
-                { 
-                    tableId,
-                    isActive: !currentStatus
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                }
-            )
+            const response = await axios.post(url + "/api/table/update-status", { 
+                tableId,
+                isActive: !currentStatus
+            })
             
             if (response.data.success) {
                 toast.success("Table status updated")
                 fetchTables()
-            } else {
-                toast.error("Error updating status")
             }
         } catch (error) {
             console.error("Error updating status:", error)
