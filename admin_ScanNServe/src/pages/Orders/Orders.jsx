@@ -7,44 +7,66 @@ import { useAuth } from '@clerk/clerk-react'
 
 const Orders = ({ url }) => {
 
-  const { getToken } = useAuth();
+  const { getToken, isLoaded, isSignedIn } = useAuth();
   const [orders, setOrders] = useState([])
 
   const fetchAllOrders = async () => {
+    if (!isLoaded || !isSignedIn) {
+      return;
+    }
+
     try {
-      const token = await getToken();
+      const token = await getToken({ template: "default" });
       
+      if (!token) {
+        toast.error("Authentication failed. Please login again.");
+        return;
+      }
+
       const response = await axios.get(url + "/api/order/list", {
         headers: {
-          Authorization: `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
       });
 
       if (response.data.success) {
         setOrders(response.data.data)
       } else {
-        toast.error("Error")
+        toast.error("Error fetching orders")
       }
     } catch (error) {
       console.error("Error fetching orders:", error);
-      if (error.response?.status === 403) {
+      
+      if (error.response?.status === 401) {
+        toast.error("Unauthorized. Please login again.");
+      } else if (error.response?.status === 403) {
         toast.error("Access denied. Admin privileges required.");
       } else {
-        toast.error("Failed to fetch orders");
+        toast.error(error.response?.data?.message || "Failed to fetch orders");
       }
     }
   }
 
   const statusHandler = async (event, orderId) => {
+    if (!isLoaded || !isSignedIn) {
+      toast.error("Please sign in to update status");
+      return;
+    }
+
     try {
-      const token = await getToken();
+      const token = await getToken({ template: "default" });
       
+      if (!token) {
+        toast.error("Authentication failed. Please login again.");
+        return;
+      }
+
       const response = await axios.post(url + "/api/order/status", {
         orderId,
         status: event.target.value
       }, {
         headers: {
-          Authorization: `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
       });
 
@@ -54,17 +76,26 @@ const Orders = ({ url }) => {
       }
     } catch (error) {
       console.error("Error updating status:", error);
-      if (error.response?.status === 403) {
+      
+      if (error.response?.status === 401) {
+        toast.error("Unauthorized. Please login again.");
+      } else if (error.response?.status === 403) {
         toast.error("Access denied. Admin privileges required.");
       } else {
-        toast.error("Failed to update status");
+        toast.error(error.response?.data?.message || "Failed to update status");
       }
     }
   }
 
   useEffect(() => {
-    fetchAllOrders()
-  }, [])
+    if (isLoaded && isSignedIn) {
+      fetchAllOrders()
+    }
+  }, [isLoaded, isSignedIn])
+
+  if (!isLoaded) {
+    return <div>Loading...</div>
+  }
 
   return (
     <div className='order add'>

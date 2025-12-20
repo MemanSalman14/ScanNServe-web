@@ -10,6 +10,11 @@ import tableRouter from "./routes/tableRoute.js"
 import {inngest, functions} from "./inngest/index.js"
 import { serve } from "inngest/express"
 
+// Validate required environment variables
+if (!process.env.CLERK_SECRET_KEY) {
+    console.error("ERROR: CLERK_SECRET_KEY is not set in environment variables");
+    process.exit(1);
+}
 
 // app config
 const app = express()

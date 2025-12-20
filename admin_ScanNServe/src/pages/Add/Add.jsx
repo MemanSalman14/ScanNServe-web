@@ -7,7 +7,7 @@ import { useAuth } from '@clerk/clerk-react'
 
 const Add = ({ url }) => {
 
-    const { getToken } = useAuth()
+    const { getToken, isLoaded, isSignedIn } = useAuth()
     const [image, setImage] = useState(false);
     const [data, setData] = useState({
         name: "",
@@ -15,6 +15,7 @@ const Add = ({ url }) => {
         price: "",
         category: "Salad"
     })
+    const [loading, setLoading] = useState(false);
 
     const onChangeHandler = (event) => {
         const name = event.target.name;
@@ -25,6 +26,13 @@ const Add = ({ url }) => {
     const onSubmitHandler = async (event) => {
         event.preventDefault();
         
+        if (!isLoaded || !isSignedIn) {
+            toast.error("Please sign in to add items");
+            return;
+        }
+        
+        setLoading(true);
+
         const formData = new FormData();
         formData.append("name", data.name)
         formData.append("description", data.description)
@@ -33,11 +41,21 @@ const Add = ({ url }) => {
         formData.append("image", image)
 
         try {
-            const token = await getToken()
+            // Get fresh token
+            const token = await getToken({ template: "default" })
             
+            if (!token) {
+                toast.error("Authentication failed. Please login again.");
+                return;
+            }
+
+            console.log("Sending request to:", `${url}/api/food/add`);
+            console.log("Token present:", !!token);
+
             const response = await axios.post(`${url}/api/food/add`, formData, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
                 }
             });
 
@@ -55,12 +73,22 @@ const Add = ({ url }) => {
             }
         } catch (error) {
             console.error("Error adding food:", error)
-            if (error.response?.status === 403) {
+            console.error("Error response:", error.response?.data)
+            
+            if (error.response?.status === 401) {
+                toast.error("Unauthorized. Please login again.")
+            } else if (error.response?.status === 403) {
                 toast.error("Access denied. Admin privileges required.")
             } else {
-                toast.error("Failed to add food item")
+                toast.error(error.response?.data?.message || "Failed to add food item")
             }
+        } finally {
+            setLoading(false);
         }
+    }
+
+    if (!isLoaded) {
+        return <div>Loading...</div>
     }
 
     return (
@@ -75,7 +103,7 @@ const Add = ({ url }) => {
                 </div>
                 <div className="add-product-name flex-col">
                     <p>Product name</p>
-                    <input onChange={onChangeHandler} value={data.name} type="text" name='name' placeholder='Type here' />
+                    <input onChange={onChangeHandler} value={data.name} type="text" name='name' placeholder='Type here' required />
                 </div>
                 <div className="add-product-description flex-col">
                     <p>Product description</p>
@@ -84,7 +112,7 @@ const Add = ({ url }) => {
                 <div className="add-category-price">
                     <div className="add-category flex-col">
                         <p>Product category</p>
-                        <select onChange={onChangeHandler} name="category">
+                        <select onChange={onChangeHandler} name="category" value={data.category}>
                             <option value="Salad">Salad</option>
                             <option value="Rolls">Rolls</option>
                             <option value="Deserts">Deserts</option>
@@ -97,10 +125,12 @@ const Add = ({ url }) => {
                     </div>
                     <div className="add-price flex-col">
                         <p>Product price</p>
-                        <input onChange={onChangeHandler} value={data.price} type="Number" name='price' placeholder='₹20' />
+                        <input onChange={onChangeHandler} value={data.price} type="Number" name='price' placeholder='₹200' required />
                     </div>
                 </div>
-                <button type='submit' className='add-btn'>ADD</button>
+                <button type='submit' className='add-btn' disabled={loading}>
+                    {loading ? 'ADDING...' : 'ADD'}
+                </button>
             </form>
         </div>
     )

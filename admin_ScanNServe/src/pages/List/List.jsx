@@ -6,25 +6,40 @@ import { useAuth } from '@clerk/clerk-react';
 
 const List = ({ url }) => {
 
-  const { getToken } = useAuth();
+  const { getToken, isLoaded, isSignedIn } = useAuth();
   const [list, setList] = useState([]);
 
   const fetchList = async () => {
-    const response = await axios.get(`${url}/api/food/list`);
-    if (response.data.success) {
-      setList(response.data.data);
-    } else {
-      toast.error("Error")
+    try {
+      const response = await axios.get(`${url}/api/food/list`);
+      if (response.data.success) {
+        setList(response.data.data);
+      } else {
+        toast.error("Error fetching list")
+      }
+    } catch (error) {
+      console.error("Error fetching list:", error);
+      toast.error("Failed to fetch food items");
     }
   }
 
   const removeFood = async (foodId) => {
+    if (!isLoaded || !isSignedIn) {
+      toast.error("Please sign in to remove items");
+      return;
+    }
+
     try {
-      const token = await getToken();
+      const token = await getToken({ template: "default" });
       
+      if (!token) {
+        toast.error("Authentication failed. Please login again.");
+        return;
+      }
+
       const response = await axios.post(`${url}/api/food/remove`, { id: foodId }, {
         headers: {
-          Authorization: `Bearer ${token}`
+          'Authorization': `Bearer ${token}`
         }
       });
 
@@ -32,14 +47,17 @@ const List = ({ url }) => {
         toast.success(response.data.message);
         await fetchList();
       } else {
-        toast.error("Error")
+        toast.error("Error removing item")
       }
     } catch (error) {
       console.error("Error removing food:", error);
-      if (error.response?.status === 403) {
+      
+      if (error.response?.status === 401) {
+        toast.error("Unauthorized. Please login again.");
+      } else if (error.response?.status === 403) {
         toast.error("Access denied. Admin privileges required.");
       } else {
-        toast.error("Failed to remove food item");
+        toast.error(error.response?.data?.message || "Failed to remove food item");
       }
     }
   }
@@ -79,6 +97,6 @@ export default List
 
 
 
-
+    
 
     

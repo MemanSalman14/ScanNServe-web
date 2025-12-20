@@ -5,19 +5,27 @@ import { toast } from 'react-toastify'
 import { useAuth } from '@clerk/clerk-react'
 
 const QRGenerator = ({ url }) => {
-    const { getToken } = useAuth();
+    const { getToken, isLoaded, isSignedIn } = useAuth();
     const [tableNumber, setTableNumber] = useState('')
     const [tables, setTables] = useState([])
     const [loading, setLoading] = useState(false)
 
     // Fetch all tables
     const fetchTables = async () => {
+        if (!isLoaded || !isSignedIn) {
+            return;
+        }
+
         try {
-            const token = await getToken();
+            const token = await getToken({ template: "default" });
             
+            if (!token) {
+                return;
+            }
+
             const response = await axios.get(url + "/api/table/list", {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
 
@@ -33,8 +41,10 @@ const QRGenerator = ({ url }) => {
     }
 
     useEffect(() => {
-        fetchTables()
-    }, [])
+        if (isLoaded && isSignedIn) {
+            fetchTables()
+        }
+    }, [isLoaded, isSignedIn])
 
     // Generate QR code
     const handleGenerate = async (e) => {
@@ -45,15 +55,25 @@ const QRGenerator = ({ url }) => {
             return
         }
 
+        if (!isLoaded || !isSignedIn) {
+            toast.error("Please sign in to generate QR codes");
+            return;
+        }
+
         setLoading(true)
         try {
-            const token = await getToken();
+            const token = await getToken({ template: "default" });
             
+            if (!token) {
+                toast.error("Authentication failed. Please login again.");
+                return;
+            }
+
             const response = await axios.post(url + "/api/table/generate", { 
                 tableNumber 
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
 
@@ -66,10 +86,12 @@ const QRGenerator = ({ url }) => {
             }
         } catch (error) {
             console.error("Error generating QR:", error);
-            if (error.response?.status === 403) {
+            if (error.response?.status === 401) {
+                toast.error("Unauthorized. Please login again.");
+            } else if (error.response?.status === 403) {
                 toast.error("Access denied. Admin privileges required.");
             } else {
-                toast.error("Failed to generate QR code");
+                toast.error(error.response?.data?.message || "Failed to generate QR code");
             }
         }
         setLoading(false)
@@ -85,15 +107,25 @@ const QRGenerator = ({ url }) => {
 
     // Delete table
     const deleteTable = async (tableId) => {
+        if (!isLoaded || !isSignedIn) {
+            toast.error("Please sign in to delete tables");
+            return;
+        }
+
         if (window.confirm("Are you sure you want to delete this table?")) {
             try {
-                const token = await getToken();
+                const token = await getToken({ template: "default" });
                 
+                if (!token) {
+                    toast.error("Authentication failed. Please login again.");
+                    return;
+                }
+
                 const response = await axios.post(url + "/api/table/delete", { 
                     tableId 
                 }, {
                     headers: {
-                        Authorization: `Bearer ${token}`
+                        'Authorization': `Bearer ${token}`
                     }
                 });
                 
@@ -103,10 +135,12 @@ const QRGenerator = ({ url }) => {
                 }
             } catch (error) {
                 console.error("Error deleting table:", error);
-                if (error.response?.status === 403) {
+                if (error.response?.status === 401) {
+                    toast.error("Unauthorized. Please login again.");
+                } else if (error.response?.status === 403) {
                     toast.error("Access denied. Admin privileges required.");
                 } else {
-                    toast.error("Failed to delete table");
+                    toast.error(error.response?.data?.message || "Failed to delete table");
                 }
             }
         }
@@ -114,15 +148,25 @@ const QRGenerator = ({ url }) => {
 
     // Toggle table status
     const toggleTableStatus = async (tableId, currentStatus) => {
+        if (!isLoaded || !isSignedIn) {
+            toast.error("Please sign in to update table status");
+            return;
+        }
+
         try {
-            const token = await getToken();
+            const token = await getToken({ template: "default" });
             
+            if (!token) {
+                toast.error("Authentication failed. Please login again.");
+                return;
+            }
+
             const response = await axios.post(url + "/api/table/update-status", { 
                 tableId,
                 isActive: !currentStatus
             }, {
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
             
@@ -132,10 +176,12 @@ const QRGenerator = ({ url }) => {
             }
         } catch (error) {
             console.error("Error updating status:", error);
-            if (error.response?.status === 403) {
+            if (error.response?.status === 401) {
+                toast.error("Unauthorized. Please login again.");
+            } else if (error.response?.status === 403) {
                 toast.error("Access denied. Admin privileges required.");
             } else {
-                toast.error("Failed to update status");
+                toast.error(error.response?.data?.message || "Failed to update status");
             }
         }
     }
@@ -160,6 +206,10 @@ const QRGenerator = ({ url }) => {
             printWindow.print()
             printWindow.close()
         }, 250)
+    }
+
+    if (!isLoaded) {
+        return <div>Loading...</div>
     }
 
     return (
