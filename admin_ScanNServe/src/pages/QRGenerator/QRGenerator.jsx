@@ -17,7 +17,7 @@ const QRGenerator = ({ url }) => {
         }
 
         try {
-            const token = await getToken({ template: "default" });
+            const token = await getToken();
             
             if (!token) {
                 return;
@@ -62,10 +62,11 @@ const QRGenerator = ({ url }) => {
 
         setLoading(true)
         try {
-            const token = await getToken({ template: "default" });
+            const token = await getToken();
             
             if (!token) {
                 toast.error("Authentication failed. Please login again.");
+                setLoading(false);
                 return;
             }
 
@@ -114,7 +115,7 @@ const QRGenerator = ({ url }) => {
 
         if (window.confirm("Are you sure you want to delete this table?")) {
             try {
-                const token = await getToken({ template: "default" });
+                const token = await getToken();
                 
                 if (!token) {
                     toast.error("Authentication failed. Please login again.");
@@ -154,7 +155,7 @@ const QRGenerator = ({ url }) => {
         }
 
         try {
-            const token = await getToken({ template: "default" });
+            const token = await getToken();
             
             if (!token) {
                 toast.error("Authentication failed. Please login again.");

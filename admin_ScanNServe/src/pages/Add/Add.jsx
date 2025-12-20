@@ -41,16 +41,16 @@ const Add = ({ url }) => {
         formData.append("image", image)
 
         try {
-            // Get fresh token
-            const token = await getToken({ template: "default" })
+            // Get token without template
+            const token = await getToken()
             
             if (!token) {
                 toast.error("Authentication failed. Please login again.");
+                setLoading(false);
                 return;
             }
 
-            console.log("Sending request to:", `${url}/api/food/add`);
-            console.log("Token present:", !!token);
+            console.log("Token obtained successfully");
 
             const response = await axios.post(`${url}/api/food/add`, formData, {
                 headers: {

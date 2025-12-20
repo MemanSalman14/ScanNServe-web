@@ -30,7 +30,7 @@ const List = ({ url }) => {
     }
 
     try {
-      const token = await getToken({ template: "default" });
+      const token = await getToken();
       
       if (!token) {
         toast.error("Authentication failed. Please login again.");
@@ -80,7 +80,7 @@ const List = ({ url }) => {
         {list.map((item, index) => {
           return (
             <div key={index} className='list-table-format'>
-              <img src={`data:image/png;base64,${item.image}`} alt={item.name} style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
+              <img src={`data:image/png;base64,${item.image}`} alt={item.name} style={{ width: '40px', height: '40px', objectFit: 'cover' }} /> 
               <p>{item.name}</p>
               <p>{item.category}</p>
               <p>₹{item.price}</p>
@@ -97,6 +97,6 @@ export default List
 
 
 
-    
+       
 
     

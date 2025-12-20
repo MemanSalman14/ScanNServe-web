@@ -16,7 +16,7 @@ const Orders = ({ url }) => {
     }
 
     try {
-      const token = await getToken({ template: "default" });
+      const token = await getToken();
       
       if (!token) {
         toast.error("Authentication failed. Please login again.");
@@ -54,7 +54,7 @@ const Orders = ({ url }) => {
     }
 
     try {
-      const token = await getToken({ template: "default" });
+      const token = await getToken();
       
       if (!token) {
         toast.error("Authentication failed. Please login again.");
