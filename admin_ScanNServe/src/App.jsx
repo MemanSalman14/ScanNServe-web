@@ -9,6 +9,7 @@ import QRGenerator from './pages/QRGenerator/QRGenerator'
 import Login from './pages/Login/Login'
 import Signup from './pages/Signup/Signup'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+import RoleCheck from './components/RoleCheck/RoleCheck'
 import { useAuth } from '@clerk/clerk-react'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -45,23 +46,25 @@ const App = () => {
           isSignedIn ? <Navigate to="/add" replace /> : <Signup />
         } />
 
-        {/* Protected Routes */}
+        {/* Protected Admin Routes */}
         <Route path="/*" element={
           <ProtectedRoute>
-            <>
-              <Navbar />
-              <hr />
-              <div className="app-content">
-                <Sidebar />
-                <Routes>
-                  <Route path="/" element={<Navigate to="/add" replace />} />
-                  <Route path="/add" element={<Add url={url} />} />
-                  <Route path="/list" element={<List url={url} />} />
-                  <Route path="/orders" element={<Orders url={url} />} />
-                  <Route path="/qr-generator" element={<QRGenerator url={url} />} />
-                </Routes>
-              </div>
-            </>
+            <RoleCheck>
+              <>
+                <Navbar />
+                <hr />
+                <div className="app-content">
+                  <Sidebar />
+                  <Routes>
+                    <Route path="/" element={<Navigate to="/add" replace />} />
+                    <Route path="/add" element={<Add url={url} />} />
+                    <Route path="/list" element={<List url={url} />} />
+                    <Route path="/orders" element={<Orders url={url} />} />
+                    <Route path="/qr-generator" element={<QRGenerator url={url} />} />
+                  </Routes>
+                </div>
+              </>
+            </RoleCheck>
           </ProtectedRoute>
         } />
       </Routes>

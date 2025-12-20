@@ -2,50 +2,56 @@ import React, { useEffect, useState } from 'react'
 import './List.css'
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useAuth } from '@clerk/clerk-react';
 
-const List = ({url}) => {
+const List = ({ url }) => {
 
+  const { getToken } = useAuth();
   const [list, setList] = useState([]);
 
   const fetchList = async () => {
-    const response = await axios.get(`${url}/api/food/list`)
-    {/*
-      console.log(response.data)
-      */}
+    const response = await axios.get(`${url}/api/food/list`);
     if (response.data.success) {
       setList(response.data.data);
-    }
-    else {
+    } else {
       toast.error("Error")
     }
   }
 
   const removeFood = async (foodId) => {
-    {/*
-      console.log(foodId)
-      */}
-    const response = await axios.post(`${url}/api/food/remove`, {
-      id: foodId
-    })
-    await fetchList();
-    if (response.data.success) {
-      toast.success(response.data.message)
-    }
-    else {
-      toast.error("Error")
+    try {
+      const token = await getToken();
+      
+      const response = await axios.post(`${url}/api/food/remove`, { id: foodId }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        await fetchList();
+      } else {
+        toast.error("Error")
+      }
+    } catch (error) {
+      console.error("Error removing food:", error);
+      if (error.response?.status === 403) {
+        toast.error("Access denied. Admin privileges required.");
+      } else {
+        toast.error("Failed to remove food item");
+      }
     }
   }
-  
-  
+
   useEffect(() => {
     fetchList();
   }, [])
-  
 
   return (
-      <div className='list add flex-col'>
+    <div className='list add flex-col'>
       <p>All Foods List</p>
-      <div className='list-table'>
+      <div className="list-table">
         <div className="list-table-format title">
           <b>Image</b>
           <b>Name</b>
@@ -56,10 +62,6 @@ const List = ({url}) => {
         {list.map((item, index) => {
           return (
             <div key={index} className='list-table-format'>
-              {/*
-              <img src={`${url}/images/` + item.image} alt="" />
-              */}
-              {/* Displaying image from base64 string */}
               <img src={`data:image/png;base64,${item.image}`} alt={item.name} style={{ width: '40px', height: '40px', objectFit: 'cover' }} />
               <p>{item.name}</p>
               <p>{item.category}</p>
@@ -74,3 +76,9 @@ const List = ({url}) => {
 }
 
 export default List
+
+
+
+
+
+    

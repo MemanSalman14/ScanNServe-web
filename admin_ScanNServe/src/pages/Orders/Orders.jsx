@@ -3,29 +3,62 @@ import './Orders.css'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { assets } from '../../assets/assets'
+import { useAuth } from '@clerk/clerk-react'
 
-const Orders = ({url}) => {
+const Orders = ({ url }) => {
 
+  const { getToken } = useAuth();
   const [orders, setOrders] = useState([])
 
   const fetchAllOrders = async () => {
-    const response = await axios.get(url+"/api/order/list")
-    if (response.data.success) {
-      setOrders(response.data.data)
-      console.log(response.data.data)
-    } else {
-      toast.error("Error")
+    try {
+      const token = await getToken();
+      
+      const response = await axios.get(url + "/api/order/list", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.data.success) {
+        setOrders(response.data.data)
+      } else {
+        toast.error("Error")
+      }
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      if (error.response?.status === 403) {
+        toast.error("Access denied. Admin privileges required.");
+      } else {
+        toast.error("Failed to fetch orders");
+      }
     }
   }
 
   const statusHandler = async (event, orderId) => {
-    const response = await axios.post(url+"/api/order/status", {
-      orderId,
-      status: event.target.value
-    })
-    if (response.data.success) {
-      await fetchAllOrders()
-      toast.success("Status Updated")
+    try {
+      const token = await getToken();
+      
+      const response = await axios.post(url + "/api/order/status", {
+        orderId,
+        status: event.target.value
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.data.success) {
+        await fetchAllOrders()
+        toast.success("Status Updated")
+      }
+    } catch (error) {
+      console.error("Error updating status:", error);
+      if (error.response?.status === 403) {
+        toast.error("Access denied. Admin privileges required.");
+      } else {
+        toast.error("Failed to update status");
+      }
     }
   }
 

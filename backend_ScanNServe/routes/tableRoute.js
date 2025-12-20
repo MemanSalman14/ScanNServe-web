@@ -1,11 +1,13 @@
 import express from "express";
+import adminAuth from "../middleware/adminAuth.js";
 import { generateTableQR, getAllTables, deleteTableQR, updateTableStatus } from "../controllers/tableController.js";
 
 const tableRouter = express.Router();
 
-tableRouter.post("/generate", generateTableQR);
-tableRouter.get("/list", getAllTables);
-tableRouter.post("/delete", deleteTableQR);
-tableRouter.post("/update-status", updateTableStatus);
+// Admin-only routes for table management
+tableRouter.post("/generate", adminAuth, generateTableQR);
+tableRouter.get("/list", adminAuth, getAllTables);
+tableRouter.post("/delete", adminAuth, deleteTableQR);
+tableRouter.post("/update-status", adminAuth, updateTableStatus);
 
 export default tableRouter;
