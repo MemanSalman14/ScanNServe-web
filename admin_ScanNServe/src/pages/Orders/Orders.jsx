@@ -53,6 +53,8 @@ const Orders = ({ url }) => {
       return;
     }
 
+    const newStatus = event.target.value;
+
     try {
       const token = await getToken();
       
@@ -63,7 +65,7 @@ const Orders = ({ url }) => {
 
       const response = await axios.post(url + "/api/order/status", {
         orderId,
-        status: event.target.value
+        status: newStatus
       }, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -71,8 +73,19 @@ const Orders = ({ url }) => {
       });
 
       if (response.data.success) {
-        await fetchAllOrders()
+        // Update the local state immediately for better UX
+        setOrders(prevOrders => 
+          prevOrders.map(order => 
+            order._id === orderId 
+              ? { ...order, status: newStatus }
+              : order
+          )
+        );
         toast.success("Status Updated")
+      } else {
+        toast.error(response.data.message || "Failed to update status")
+        // Revert the dropdown if update failed
+        await fetchAllOrders()
       }
     } catch (error) {
       console.error("Error updating status:", error);
@@ -84,6 +97,9 @@ const Orders = ({ url }) => {
       } else {
         toast.error(error.response?.data?.message || "Failed to update status");
       }
+      
+      // Revert the dropdown if there was an error
+      await fetchAllOrders()
     }
   }
 
@@ -127,7 +143,10 @@ const Orders = ({ url }) => {
             <p className={`payment-method ${order.paymentMethod === 'PayAtCounter' ? 'counter' : 'online'}`}>
               {order.paymentMethod === 'PayAtCounter' ? '💵 Counter' : '💳 Paid'}
             </p>
-            <select onChange={(event) => statusHandler(event, order._id)} value={order.status}>
+            <select 
+              onChange={(event) => statusHandler(event, order._id)} 
+              value={order.status || "Order Received"}
+            >
               <option value="Order Received">Order Received</option>
               <option value="Preparing">Preparing</option>
               <option value="Ready to Serve">Ready to Serve</option>
