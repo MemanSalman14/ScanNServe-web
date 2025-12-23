@@ -4,17 +4,33 @@
     justify-content: space-between;
     gap: 50px;
     margin-top: 100px;
+    padding: 0 20px;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 60px;
 }
 
 .place-order-left {
     width: 100%;
     max-width: max(30%, 500px);
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 12px;
+    border: 2px solid #e8e8e8;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .place-order-left .title {
     font-size: 30px;
-    font-weight: 600;
-    margin-bottom: 50px;
+    font-weight: 700;
+    margin-bottom: 35px;
+    color: #2d4a3e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    border-bottom: 3px solid #c9a668;
+    padding-bottom: 15px;
 }
 
 .table-number-input {
@@ -26,24 +42,51 @@
     margin-bottom: 10px;
     font-size: 16px;
     font-weight: 600;
-    color: #333;
+    color: #2d4a3e;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .table-input {
     width: 100%;
     padding: 15px;
-    border: 1px solid #c5c5c5;
+    border: 2px solid #c9a668;
     border-radius: 8px;
     outline: none;
-    font-size: 18px;
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
     text-align: center;
-    background-color: #fff5f5;
+    background-color: #fef9f3;
+    color: #2d4a3e;
+    transition: all 0.3s ease;
 }
 
 .table-input:focus {
-    border-color: tomato;
+    border-color: #b89558;
     background-color: white;
+    box-shadow: 0 0 0 3px rgba(201, 166, 104, 0.1);
+}
+
+.table-input[readonly] {
+    background-color: #e8f5e9;
+    cursor: not-allowed;
+    border-color: #28a745;
+}
+
+.scanned-note {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #28a745;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.scanned-note::before {
+    content: "✓";
+    font-weight: 700;
+    font-size: 16px;
 }
 
 .customer-info {
@@ -54,20 +97,25 @@
     display: block;
     margin-bottom: 8px;
     font-size: 14px;
-    font-weight: 500;
-    color: #555;
+    font-weight: 600;
+    color: #2d4a3e;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 .customer-info input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #c5c5c5;
-    border-radius: 6px;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
     outline: none;
+    font-size: 15px;
+    transition: all 0.3s ease;
 }
 
 .customer-info input:focus {
-    border-color: tomato;
+    border-color: #c9a668;
+    box-shadow: 0 0 0 3px rgba(201, 166, 104, 0.1);
 }
 
 .special-instructions {
@@ -78,22 +126,28 @@
     display: block;
     margin-bottom: 8px;
     font-size: 14px;
-    font-weight: 500;
-    color: #555;
+    font-weight: 600;
+    color: #2d4a3e;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 .special-instructions textarea {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #c5c5c5;
-    border-radius: 6px;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
     outline: none;
     resize: vertical;
     font-family: inherit;
+    font-size: 15px;
+    min-height: 100px;
+    transition: all 0.3s ease;
 }
 
 .special-instructions textarea:focus {
-    border-color: tomato;
+    border-color: #c9a668;
+    box-shadow: 0 0 0 3px rgba(201, 166, 104, 0.1);
 }
 
 .place-order-right {
@@ -106,17 +160,42 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    background: linear-gradient(135deg, #2d4a3e 0%, #1e3a2e 100%);
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .cart-total h2 {
-    font-size: 24px;
-    font-weight: 600;
+    font-size: 26px;
+    font-weight: 700;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    text-align: center;
+    border-bottom: 3px solid #c9a668;
+    padding-bottom: 15px;
 }
 
 .cart-total-details {
     display: flex;
     justify-content: space-between;
-    color: #555;
+    color: #a8b5a8;
+    font-size: 16px;
+    padding: 8px 0;
+}
+
+.cart-total-details b {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.cart-total hr {
+    height: 2px;
+    background: rgba(201, 166, 104, 0.3);
+    border: none;
+    margin: 15px 0;
 }
 
 .payment-method {
@@ -125,9 +204,11 @@
 
 .payment-method h3 {
     font-size: 18px;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 15px;
-    color: #333;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .payment-options {
@@ -140,15 +221,16 @@
     display: flex;
     align-items: center;
     padding: 12px 15px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid rgba(168, 181, 168, 0.3);
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.05);
 }
 
 .payment-option:hover {
-    border-color: tomato;
-    background-color: #fff5f5;
+    border-color: #c9a668;
+    background-color: rgba(201, 166, 104, 0.1);
 }
 
 .payment-option input[type="radio"] {
@@ -156,63 +238,158 @@
     width: 18px;
     height: 18px;
     cursor: pointer;
-    accent-color: tomato;
+    accent-color: #c9a668;
 }
 
 .payment-option span {
     font-size: 15px;
-    color: #555;
+    color: #a8b5a8;
     font-weight: 500;
 }
 
-.payment-option input[type="radio"]:checked + span {
-    color: tomato;
-    font-weight: 600;
+.payment-option input[type="radio"]:checked ~ span {
+    color: #c9a668;
+    font-weight: 700;
+}
+
+.payment-option.selected {
+    border-color: #c9a668;
+    background-color: rgba(201, 166, 104, 0.15);
 }
 
 .place-order-btn {
     width: 100%;
     padding: 15px;
     border: none;
-    color: white;
-    background-color: tomato;
+    color: #2d4a3e;
+    background-color: #c9a668;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 700;
     border-radius: 8px;
     cursor: pointer;
     margin-top: 20px;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .place-order-btn:hover {
-    background-color: #ff6347;
+    background-color: #b89558;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(255, 99, 71, 0.3);
+    box-shadow: 0 6px 15px rgba(201, 166, 104, 0.4);
 }
 
-.scanned-note {
-    margin-top: 8px;
-    font-size: 13px;
-    color: #28a745;
-    font-weight: 600;
+.place-order-btn:active {
+    transform: translateY(0);
 }
 
-.table-input[readonly] {
-    background-color: #e8f5e9;
+.place-order-btn:disabled {
+    background-color: #888;
     cursor: not-allowed;
+    transform: none;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 1024px) {
     .place-order {
-        flex-direction: column;
+        gap: 40px;
+        margin-top: 80px;
     }
 
-    .place-order-left, .place-order-right {
+    .place-order-left,
+    .place-order-right {
         max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .place-order {
+        flex-direction: column;
+        gap: 30px;
+        margin-top: 60px;
+        padding: 0 15px;
+    }
+
+    .place-order-left {
+        padding: 25px;
     }
 
     .place-order-left .title {
         font-size: 24px;
-        margin-bottom: 30px;
+        margin-bottom: 25px;
+    }
+
+    .table-input {
+        font-size: 18px;
+        padding: 12px;
+    }
+
+    .cart-total {
+        padding: 25px;
+    }
+
+    .cart-total h2 {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .place-order {
+        padding: 0 10px;
+        margin-top: 50px;
+    }
+
+    .place-order-left {
+        padding: 20px;
+    }
+
+    .place-order-left .title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .table-number-input label,
+    .customer-info label,
+    .special-instructions label {
+        font-size: 13px;
+    }
+
+    .table-input {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .customer-info input,
+    .special-instructions textarea {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+
+    .cart-total {
+        padding: 20px;
+    }
+
+    .cart-total h2 {
+        font-size: 20px;
+    }
+
+    .cart-total-details {
+        font-size: 14px;
+    }
+
+    .payment-method h3 {
+        font-size: 16px;
+    }
+
+    .payment-option {
+        padding: 10px 12px;
+    }
+
+    .payment-option span {
+        font-size: 14px;
+    }
+
+    .place-order-btn {
+        font-size: 14px;
+        padding: 12px;
     }
 }

@@ -1,0 +1,376 @@
+.how-it-works {
+    padding: 100px 20px;
+    background: url('/pattern-dark.png') repeat;
+    position: relative;
+    min-height: 100%;
+    margin: 60px auto;
+    border-radius: 8px;
+    max-width: 1400px;
+    overflow: visible;
+}
+
+.how-it-works::before {
+    content: '';
+    position: absolute;
+    inset: 10px;
+    border: 3px solid #c9a668;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.how-it-works::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(201, 166, 104, 0.03) 10px,
+        rgba(201, 166, 104, 0.03) 20px
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+.how-it-works-header {
+    text-align: center;
+    margin-bottom: 70px;
+    position: relative;
+    z-index: 2;
+}
+
+.how-it-works-header::before {
+    content: '✦ SEAMLESS DINING EXPERIENCE ✦';
+    display: block;
+    font-size: 14px;
+    color: #c9a668;
+    letter-spacing: 3px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.how-it-works-header h2 {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-size: max(4vw, 48px);
+    font-weight: 400;
+    color: #ffffff;
+    text-transform: capitalize;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.how-it-works-header p {
+    font-size: max(1.1vw, 16px);
+    color: #a8b5a8;
+    font-weight: 300;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.how-it-works-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.step {
+    text-align: center;
+    padding: 50px 40px;
+    background: rgba(45, 74, 62, 0.6);
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    border: 2px solid #c9a668;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: visible;
+}
+
+.step::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a668, transparent);
+}
+
+.step::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 8px;
+    padding: 2px;
+    background: linear-gradient(135deg, #c9a668, transparent, #c9a668);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.step:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(201, 166, 104, 0.3);
+    background: rgba(45, 74, 62, 0.8);
+}
+
+.step:hover::after {
+    opacity: 1;
+}
+
+.step-number {
+    position: absolute;
+    top: 1px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 90px;
+    font-weight: 700;
+    color: rgba(201, 166, 104, 0.15);
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+    z-index: 0;
+}
+
+.step-icon {
+    width: 90px;
+    height: 90px;
+    margin: 30px auto 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #c9a668 0%, #b89558 100%);
+    border-radius: 50%;
+    color: #2d4a3e;
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 30px rgba(201, 166, 104, 0.3);
+    position: relative;
+    z-index: 1;
+}
+
+.step:hover .step-icon {
+    transform: scale(1.15) ;
+   
+}
+
+.step-icon svg {
+    width: 45px;
+    height: 45px;
+}
+
+.step h3 {
+    font-family: 'Playfair Display', 'Georgia', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 15px;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+}
+
+.step p {
+    font-size: 15px;
+    color: #a8b5a8;
+    line-height: 1.8;
+    font-weight: 300;
+    position: relative;
+    z-index: 1;
+}
+
+.how-it-works-side-image {
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 350px;
+    height: auto;
+    z-index: 3;
+    pointer-events: none;
+    opacity: 0.95;
+    transition: transform 0.3s ease;
+}
+
+.how-it-works-side-image:hover {
+    transform: scale(1.05);
+}
+
+
+
+
+
+
+@media (max-width: 1024px) {
+    .how-it-works {
+        padding: 80px 20px;
+    }
+
+    .how-it-works-steps {
+        gap: 35px;
+    }
+
+    .step {
+        padding: 45px 35px;
+    }
+
+    .how-it-works-header h2 {
+        font-size: 42px;
+    }
+
+    .step-number {
+        font-size: 70px;
+    }
+
+    .step-icon {
+        width: 85px;
+        height: 85px;
+    }
+
+    .step h3 {
+        font-size: 24px;
+    }
+
+     .how-it-works-side-image {
+        width: 300px;
+        top: -40px;
+        right: -40px;
+    }
+}
+
+@media (max-width: 768px) {
+    .how-it-works {
+        padding: 70px 15px;
+        margin: 40px 15px;
+        border-width: 2px;
+    }
+
+    .how-it-works-header {
+        margin-bottom: 50px;
+    }
+
+    .how-it-works-header::before {
+        font-size: 12px;
+        letter-spacing: 2px;
+    }
+
+    .how-it-works-header h2 {
+        font-size: 36px;
+    }
+
+    .how-it-works-header p {
+        font-size: 15px;
+    }
+
+    .how-it-works-steps {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .step {
+        padding: 40px 30px;
+    }
+
+    .step-number {
+        font-size: 65px;
+        top: -12px;
+    }
+
+    .step-icon {
+        width: 80px;
+        height: 80px;
+        margin: 25px auto 25px;
+    }
+
+    .step-icon svg {
+        width: 40px;
+        height: 40px;
+    }
+
+    .step h3 {
+        font-size: 22px;
+    }
+
+    .step p {
+        font-size: 14px;
+    }
+
+     .how-it-works-side-image {
+        width: 250px;
+        top: -30px;
+        right: -30px;
+    }
+
+   
+}
+
+@media (max-width: 480px) {
+    .how-it-works {
+        padding: 60px 10px;
+        margin: 30px 10px;
+        border-width: 2px;
+    }
+
+    .how-it-works-header::before {
+        font-size: 11px;
+        letter-spacing: 1.5px;
+    }
+
+    .how-it-works-header h2 {
+        font-size: 30px;
+    }
+
+    .how-it-works-header p {
+        font-size: 14px;
+    }
+
+    .step {
+        padding: 35px 25px;
+    }
+
+    .step-number {
+        font-size: 55px;
+        top: -10px;
+    }
+
+    .step-icon {
+        width: 70px;
+        height: 70px;
+        margin: 20px auto 20px;
+    }
+
+    .step-icon svg {
+        width: 35px;
+        height: 35px;
+    }
+
+    .step h3 {
+        font-size: 20px;
+        margin-bottom: 12px;
+    }
+
+    .step p {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+     .how-it-works-side-image {
+        width: 180px;
+        top: -20px;
+        right: -20px;
+    }
+
+   
+}

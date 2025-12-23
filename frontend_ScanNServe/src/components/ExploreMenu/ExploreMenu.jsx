@@ -5,8 +5,15 @@ import { menu_list } from '../../assets/assets'
 const ExploreMenu = ({category,setCategory}) => {
   return (
     <div className='explore-menu' id='explore-menu'>
-      <h1>Explore our menu</h1>
-      <p className='explore-menu-text'>Choose from a diverse menu featuring a delectable array of dishes. Our mission is to satisfy your cravings and elevate your dining experience, one delicious meal at a time.</p>
+      <div className='explore-menu-header'>
+                <img 
+                    src="/menu-title-badge.svg" 
+                    alt="Special Fine Dine" 
+                    className='explore-menu-badge'
+                />
+                <h1>Delicious Menu</h1>
+      </div>
+      <p className='explore-menu-text'>Browse categories, discover flavors, and place your order instantly. Experience dining reimagined with our contactless table service.</p>
       <div className="explore-menu-list">
         {menu_list.map((item,index)=>{
             return (

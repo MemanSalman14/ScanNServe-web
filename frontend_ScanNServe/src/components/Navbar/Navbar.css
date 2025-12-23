@@ -3,32 +3,75 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* background-color: #fff; */
-    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  */ 
+    background-color: #1e3a2e;
+   
 }
-/* Logo 
-.Navbar .logo{
-    width: 150px; 
-    font-size: 24px;
-    font-weight: bold;
-    color: #333; 
-}
-  */
+
 .Navbar .logo {
-    width: 200px;    /* Increased width for better visibility */
-    height: auto;    /* Maintain aspect ratio */
+    width: 200px;
+    height: auto;
     object-fit: contain;
-    margin: 5px 0;   /* Add some vertical spacing */
-    padding: 5px 10px; /* Add some padding around the logo */
-    border-radius: 4px; /* Optional: slightly rounded corners */
+    margin: 5px 0;
+    padding: 5px 10px;
+    border-radius: 4px;
 }
+
+/*
 .Navbar-menu{
     display: flex;
-    flex-direction: row; /* flex direction is used for the direction of the children */
+    flex-direction: row;
     list-style: none;
-    gap: 20px;
-    color: #49557e;
-    font-size: 18px;
+    gap: 25px;
+    color: #b8c4be;
+    font-size: 16px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0;
+    padding: 0;
+}
+*/
+
+.Navbar-menu {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.Navbar-menu a {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: capitalize;
+    position: relative;
+    padding: 5px 0;
+}
+
+.Navbar-menu a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #c9a668;
+    transition: width 0.3s ease;
+}
+
+.Navbar-menu a:hover::after,
+.Navbar-menu a.active::after {
+    width: 100%;
+}
+
+.Navbar-menu a.active {
+    color: #c9a668;
+    font-weight: 700;
+}
+
+.Navbar-menu a:hover {
+    color: #c9a668;
 }
 
 .Navbar-right{
@@ -38,35 +81,54 @@
 }
 
 .Navbar button{
-    padding: 10px 20px;
-    border: 1px solid tomato;
+    padding: 10px 30px;
+    border: 2px solid #c9a668;
     border-radius: 50px;
     background: transparent;
     font-size: 16px;
-    color: #1c2339;
+    color: #ffffff;
     cursor: pointer;
-    
+    transition: all 0.3s ease;
+    font-weight: 600;
+    text-transform: uppercase;
 }
+
 .Navbar button:hover{
-    background-color: #fff;
-    color: #49557e;
-    transition: background-color 0.3s ease; 
+    background-color: #c9a668;
+    color: #2d4a3e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(201, 166, 104, 0.4);
 }
 
 .Navbar .active{
-    color: #49557e;
-    /* border-bottom: 2px solid #49557e; */
-    border-bottom: 2px solid tomato;
-    font-weight: 600;
+    color: #c9a668;
+    position: relative;
+    font-weight: 700;
+}
+
+.Navbar .active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #c9a668, transparent);
+    border-radius: 2px;
 }
 
 .Navbar .active:hover{
-    color: #49557e;
-    background-color: #fff;
+    color: #d4b57a;
 }
 
 .Navbar li{
     cursor: pointer;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.Navbar li:hover{
+    color: #ffffff;
 }
 
 .Navbar-search-icon{
@@ -79,9 +141,8 @@
     right: -8px;
     min-width: 10px;
     min-height: 10px;
-    background-color: tomato;
+    background-color: #c9a668;
     border-radius: 5px;
-
 }
 
 .navbar-profile{
@@ -99,11 +160,11 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    background-color: #fff2ef;
+    background-color: #2d4a3e;
     padding: 12px 25px;
     border-radius: 4px;
-    border: 1px solid tomato;
-    outline: 2px solid white;
+    border: 2px solid #c9a668;
+    outline: 2px solid #1e3a2e;
     list-style: none;
 }
 
@@ -112,6 +173,8 @@
     align-items: center;
     gap: 10px;
     cursor: pointer;
+    color: #a8b5a8;
+    transition: color 0.3s ease;
 }
 
 .nav-profile-dropdown img{
@@ -119,9 +182,187 @@
 }
 
 .nav-profile-dropdown li:hover{
-    color: tomato;
+    color: #c9a668;
 }
 
+/* Hamburger Menu Icon */
+.navbar-hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+    padding: 5px;
+}
+
+.navbar-hamburger span {
+    width: 25px;
+    height: 3px;
+    background-color: #c9a668;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.navbar-hamburger.active span:nth-child(1) {
+    transform: rotate(45deg) translate(8px, 8px);
+}
+
+.navbar-hamburger.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.navbar-hamburger.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+
+/* Mobile Menu Overlay */
+.Navbar-menu-mobile {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100vh;
+    background-color: #1e3a2e;
+    display: flex;
+    flex-direction: column;
+    padding: 30px 30px 30px;
+    gap: 25px;
+    list-style: none;
+    z-index: 1001;
+    transition: right 0.4s ease;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.Navbar-menu-mobile.active {
+    right: 0;
+}
+
+/* Mobile Menu Header */
+.mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0 20px 0;
+    border-bottom: 4px solid rgba(201, 166, 104, 0.2);
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.mobile-menu-header::after {
+     content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 80px;
+    height: 3px;
+  
+}
+
+.mobile-menu-header .logo {
+    width: 150px;
+    height: auto;
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+    border: 1px solid rgba(201, 166, 104, 0.2);
+}
+
+.mobile-menu-close {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: rgba(201, 166, 104, 0.15);
+    border: 2px solid #c9a668;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.mobile-menu-close:hover {
+    background: #c9a668;
+    transform: scale(1.05);
+}
+
+.mobile-menu-close:active {
+    transform: scale(0.95);
+}
+
+.mobile-menu-close span {
+    width: 18px;
+    height: 2.5px;
+    background-color: #c9a668;
+    position: absolute;
+    transform: rotate(45deg);
+    border-radius: 2px;
+}
+
+.mobile-menu-close span::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 2.5px;
+    background-color: #c9a668;
+    transform: rotate(-90deg);
+    border-radius: 2px;
+}
+
+.mobile-menu-close:hover span,
+.mobile-menu-close:hover span::before {
+    background-color: #1e3a2e;
+}
+
+.mobile-menu-links {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+}
+
+.Navbar-menu-mobile a {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: capitalize;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(201, 166, 104, 0.2);
+    transition: all 0.3s ease;
+}
+
+.Navbar-menu-mobile a:hover {
+    color: #c9a668;
+    padding-left: 10px;
+}
+
+.Navbar-menu-mobile a.active {
+    color: #c9a668;
+    font-weight: 700;
+    border-bottom-color: #c9a668;
+}
+
+/* Mobile Overlay Background */
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: none;
+}
+
+.mobile-menu-overlay.active {
+    display: block;
+}
+
+/* Hide navbar when mobile menu is open */
+.Navbar.menu-open {
+    opacity: 0;
+    pointer-events: none;
+}
 
 @media (max-width:1050px) {
     .Navbar .logo {
@@ -129,8 +370,8 @@
     }
 
     .Navbar-menu {
-        gap: 20px;
-        font-size: 17px;
+        gap: 35px;
+        font-size: 14px;
     }
 
     .Navbar-right {
@@ -143,6 +384,7 @@
 
     .Navbar-right button {
         padding: 8px 25px;
+        font-size: 15px;
     }
 }
 
@@ -152,8 +394,8 @@
     }
 
     .Navbar-menu {
-        gap: 15px;
-        font-size: 16px;
+        gap: 25px;
+        font-size: 13px;
     }
 
     .Navbar-right {
@@ -166,12 +408,146 @@
 
     .Navbar-right button {
         padding: 7px 20px;
-        font-size: 15px;
+        font-size: 14px;
     }
 }
 
 @media (max-width:750px) {
     .Navbar-menu {
         display: none;
+    }
+    
+    .Navbar {
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: #1e3a2e;
+    }
+
+     .Navbar .logo {
+        width: 140px;
+    }
+
+        .navbar-hamburger {
+        display: flex;
+    }
+
+    .Navbar-right {
+        gap: 15px;
+    }
+
+    .Navbar-right img {
+        width: 22px;
+    }
+
+    .Navbar-right button {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
+
+    .Navbar-search-icon .dot {
+        top: -6px;
+        right: -6px;
+        min-width: 8px;
+        min-height: 8px;
+    }
+}
+
+@media (max-width:480px) {
+    .Navbar {
+        padding: 12px 15px;
+    }
+
+    .Navbar .logo {
+        width: 120px;
+    }
+
+    .navbar-hamburger span {
+        width: 22px;
+        height: 2.5px;
+    }
+
+    .Navbar-menu-mobile {
+        width: 85%;
+        padding: 25px 25px 25px;
+        
+    }
+
+    .Navbar-menu-mobile a {
+        font-size: 16px;
+        padding: 10px 0;
+    }
+
+    .Navbar-right {
+        gap: 12px;
+    }
+
+    .Navbar-right img {
+        width: 20px;
+    }
+
+    .Navbar-right button {
+        padding: 7px 18px;
+        font-size: 12px;
+    }
+
+      .mobile-menu-header {
+        padding: 15px 0 15px 0;
+        margin-bottom: 15px;
+    }
+
+     .mobile-menu-header .logo {
+        width: 130px;
+        padding: 4px 8px;
+    }
+
+    .mobile-menu-close {
+        width: 36px;
+        height: 36px;
+    }
+
+    .mobile-menu-close span {
+        width: 16px;
+        height: 2px;
+    }
+
+    .mobile-menu-close span::before {
+        width: 16px;
+        height: 2px;
+    }
+
+    .mobile-menu-links {
+        gap: 15px;
+    }
+
+       .mobile-menu-header::after {
+        width: 70px;
+         height: 2.5px;
+    }
+}
+
+@media (max-width:380px) {
+    .mobile-menu-header .logo {
+        width: 110px;
+        padding: 3px 6px;
+    }
+
+    .mobile-menu-close {
+        width: 34px;
+        height: 34px;
+    }
+
+    .mobile-menu-close span {
+        width: 14px;
+    }
+
+    .mobile-menu-close span::before {
+        width: 14px;
+    }
+
+       .mobile-menu-header::after {
+        width: 60px;
+        height: 2px;
     }
 }

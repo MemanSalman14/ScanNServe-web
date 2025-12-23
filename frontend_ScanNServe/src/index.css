@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 
+
+
 *{
   padding: 0;
   margin: 0;
@@ -9,8 +11,10 @@
 }
 body{
   min-height: 100vh;
-
+  background: linear-gradient(180deg, #2d4a3e 0%, #1e3a2e 100%);
+  background-attachment: fixed;
 }
+
 a{
   text-decoration: none;
   color: inherit;
@@ -19,6 +23,8 @@ a{
 .App{
   width: 80%;
   margin: auto;
+  background: transparent;
+
   /* padding: 20px;
   font-family: 'Poppins', sans-serif;
   background-color: #f4f4f4;
