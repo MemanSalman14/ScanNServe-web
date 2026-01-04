@@ -8,19 +8,19 @@ const Sidebar = () => {
     <div className='sidebar'>
       <div className="sidebar-options">
         <NavLink to='/add' className="sidebar-option">
-          <img src={assets.add_icon} alt="" />
+           <img src={assets.add_icon} alt="Add Items" />
           <p>Add Items</p>
         </NavLink>
         <NavLink to='/list' className="sidebar-option">
-          <img src={assets.order_icon} alt="" />
+          <img src={assets.order_icon} alt="List Items" />
           <p>List Items</p>
         </NavLink>
         <NavLink to='/orders' className="sidebar-option">
-          <img src={assets.order_icon} alt="" />
+            <img src={assets.order_icon} alt="Orders" />
           <p>Orders</p>
         </NavLink>
         <NavLink to='/qr-generator' className="sidebar-option">
-          <p style={{fontSize: '24px', margin: 0}}>🔲</p>
+           <p style={{fontSize: '24px', margin: 0}}>🔲</p>
           <p>QR Codes</p>
         </NavLink>
       </div>

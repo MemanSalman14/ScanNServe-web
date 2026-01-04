@@ -1,5 +1,6 @@
 .about {
     margin-top: 90px;
+    margin-bottom: 0;
 }
 
 /* Hero Section */
@@ -464,6 +465,11 @@
     letter-spacing: 0.5px;
 }
 
+.values-container .section-badge {
+    display: inline-block;
+    text-align: center;
+}
+
 .values-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -560,6 +566,7 @@
     position: relative;
     overflow: hidden;
     min-height: 500px;
+    margin-bottom: 60px;
 }
 
 .about-cta::before {
@@ -730,6 +737,7 @@
     .about-cta {
         padding: 100px 20px;
         min-height: 450px;
+         margin-bottom: 50px;
     }
 
     .cta-content h2 {
@@ -823,6 +831,8 @@
         padding: 80px 15px;
         min-height: 400px;
         background-attachment: scroll;
+         margin-bottom: 40px;
+
     }
 
     .story-container {
@@ -830,14 +840,33 @@
         gap: 50px;
     }
 
+      .story-content {
+        text-align: center;
+    }
+
      .story-content h2 {
         font-size: 36px;
         text-align: center;
     }
 
-       .section-badge {
-        display: block;
+   .section-badge {
+        display: inline-block;
+        width: auto;
         text-align: center;
+        margin: 0 auto 25px;
+        position: relative;
+        padding: 0 15px;
+    }
+
+    .section-badge::before {
+        left: -20px;
+        transform: none;
+    }
+
+    .section-badge::after {
+        right: -20px;
+        left: auto;
+        transform: none;
     }
 
     .story-intro,
@@ -855,6 +884,46 @@
     
      .values-container h2 {
         font-size: 36px;
+    }
+
+       .values-container .section-badge {
+        display: inline-block;
+        width: auto;
+        text-align: center;
+        margin: 0 auto 25px;
+        position: relative;
+        padding: 0 15px;
+    }
+
+    .values-container .section-badge::before {
+        left: -20px;
+        transform: none;
+    }
+
+    .values-container .section-badge::after {
+        right: -20px;
+        left: auto;
+        transform: none;
+    }
+
+       .features-header .section-badge {
+        display: inline-block;
+        width: auto;
+        text-align: center;
+        margin: 0 auto 25px;
+        position: relative;
+        padding: 0 15px;
+    }
+
+    .features-header .section-badge::before {
+        left: -20px;
+        transform: none;
+    }
+
+    .features-header .section-badge::after {
+        right: -20px;
+        left: auto;
+        transform: none;
     }
 
     .value-item {
@@ -935,6 +1004,13 @@
      .about-hero-content h1 {
         gap: 3px;
     }
+
+      .story-content .section-badge {
+   display: inline-block;
+        text-align: center;
+        margin: 0 auto 25px;
+        position: relative;
+    }
 }
 
 @media (max-width: 480px) {
@@ -992,6 +1068,7 @@
    .about-cta {
         padding: 70px 10px;
         min-height: 350px;
+         margin-bottom: 30px;
     }
       .story-content h2 {
         font-size: 30px;
@@ -1007,6 +1084,30 @@
 
      .values-container h2 {
         font-size: 30px;
+    }
+
+   .values-container .section-badge::before {
+        left: -18px;
+    }
+
+    .values-container .section-badge::after {
+        right: -18px;
+    }
+
+      .features-header .section-badge::before {
+        left: -18px;
+    }
+
+    .features-header .section-badge::after {
+        right: -18px;
+    }
+
+       .story-content .section-badge::before {
+        left: -18px;
+    }
+
+    .story-content .section-badge::after {
+        right: -18px;
     }
 
   
@@ -1108,6 +1209,14 @@
      .about-hero-content h1 {
         gap: 2px;
     }
+
+       .section-badge::before {
+        left: -18px;
+    }
+
+    .section-badge::after {
+        right: -18px;
+    }
 }
 
 @media (max-width: 380px) {
@@ -1146,6 +1255,7 @@
 
      .about-cta {
         min-height: 320px;
+          margin-bottom: 30px;
     }
 
       .cta-content h2 {
@@ -1159,5 +1269,37 @@
     .cta-button {
         padding: 14px 35px;
         font-size: 13px;
+    }
+
+      .values-container .section-badge::before {
+        left: -16px;
+    }
+
+    .values-container .section-badge::after {
+        right: -16px;
+    }
+
+        .section-badge::before {
+        left: -16px;
+    }
+
+    .section-badge::after {
+        right: -16px;
+    }
+
+    .features-header .section-badge::before {
+        left: -16px;
+    }
+
+    .features-header .section-badge::after {
+        right: -16px;
+    }
+
+        .story-content .section-badge::before {
+        left: -16px;
+    }
+
+    .story-content .section-badge::after {
+        right: -16px;
     }
 }

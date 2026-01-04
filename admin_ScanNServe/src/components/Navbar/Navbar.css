@@ -2,8 +2,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 5%;
-    background-color: white;
+    padding: 18px 5%;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-bottom: 3px solid rgba(201, 166, 104, 0.3);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #c9a668 20%, #c9a668 80%, transparent);
 }
 
 .navbar-left {
@@ -13,7 +28,26 @@
 }
 
 .navbar .logo {
-    width: 150px;
+    width: 160px;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s ease;
+}
+
+.navbar .logo:hover {
+    transform: scale(1.05);
+}
+
+.admin-badge {
+    display: inline-block;
+    padding: 6px 16px;
+    background: linear-gradient(135deg, #c9a668, #b89558);
+    color: white;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 10px rgba(201, 166, 104, 0.3);
 }
 
 
@@ -27,13 +61,56 @@
 .admin-info {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    background: rgba(201, 166, 104, 0.1);
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: 2px solid rgba(201, 166, 104, 0.3);
+    transition: all 0.3s ease;
+}
+
+.admin-info:hover {
+    background: rgba(201, 166, 104, 0.15);
+    border-color: #c9a668;
+    box-shadow: 0 4px 12px rgba(201, 166, 104, 0.2);
 }
 
 .admin-info span {
-    font-size: 16px;
-    font-weight: 500;
-    color: #555;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a3129;
+    letter-spacing: 0.3px;
+}
+
+.admin-info::before {
+   
+    font-size: 18px;
+}
+
+/* User Button Styling */
+.navbar-right .cl-userButton {
+    border: 2px solid rgba(201, 166, 104, 0.3);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.navbar-right .cl-userButton:hover {
+    border-color: #c9a668;
+    box-shadow: 0 0 0 4px rgba(201, 166, 104, 0.1);
+}
+
+@media (max-width: 1024px) {
+    .navbar {
+        padding: 16px 4%;
+    }
+
+    .navbar .logo {
+        width: 140px;
+    }
+
+    .admin-info span {
+        font-size: 14px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -41,7 +118,57 @@
         display: none;
     }
 
-    .admin-info span {
+ .admin-info span {
         display: none;
+    }
+
+    
+    .admin-info::before {
+        font-size: 20px;
+        margin: 0;
+    }
+
+        .navbar {
+        padding: 14px 3%;
+    }
+
+    .navbar .logo {
+        width: 120px;
+    }
+
+    .admin-badge {
+        display: none;
+    }
+
+    .admin-info {
+        padding: 8px 16px;
+    }
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        padding: 12px 2%;
+    }
+
+    .navbar .logo {
+        width: 100px;
+    }
+
+    .navbar-right {
+        gap: 12px;
+    }
+
+    .admin-info {
+        padding: 6px 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar .logo {
+        width: 90px;
+    }
+
+    .navbar-right {
+        gap: 10px;
     }
 }

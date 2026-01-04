@@ -74,6 +74,13 @@ const Navbar = ({ setShowLogin }) => {
                     >
                         About Us
                     </Link>
+                      <Link 
+                        to='/myorders' 
+                        onClick={() => handleNavLinkClick("myorders")} 
+                        className={menu === "myorders" ? "active" : ""}
+                    >
+                        My Orders
+                    </Link>
                     <a 
                         href='#how-it-works' 
                         onClick={(e) => handleSectionClick(e, 'how-it-works', 'how-it-works')} 
@@ -91,7 +98,7 @@ const Navbar = ({ setShowLogin }) => {
                 </ul>
 
             <div className="Navbar-right">
-                <img src={assets.search_icon} alt="" />
+               
                 <div className="Navbar-search-icon">
                     <Link to='/cart'><img src={assets.basket_icon} alt="" /></Link>
                     <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
@@ -111,13 +118,6 @@ const Navbar = ({ setShowLogin }) => {
                                 }
                             }}
                         />
-                        <ul className="nav-profile-dropdown">
-                            <li onClick={() => navigate('/myorders')}>
-                                <img src={assets.bag_icon} alt="" />
-                                <p>Orders</p>
-                            </li>
-                            <hr />
-                        </ul>
                     </div>
                 </SignedIn>
 
@@ -173,6 +173,13 @@ const Navbar = ({ setShowLogin }) => {
                         className={menu === "about" ? "active" : ""}
                     >
                         About Us
+                    </Link>
+                     <Link 
+                        to='/myorders' 
+                        onClick={() => handleNavLinkClick("myorders")} 
+                        className={menu === "myorders" ? "active" : ""}
+                    >
+                        My Orders
                     </Link>
                     <a 
                         href='#how-it-works' 

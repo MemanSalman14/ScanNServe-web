@@ -9,7 +9,8 @@ const Navbar = () => {
   return (
     <div className='navbar'>
       <div className='navbar-left'>
-        <img className='logo' src={assets.logo} alt="" />
+    <img className='logo' src={assets.logo} alt="ScanNServe Admin" />
+      <span className='admin-badge'>Admin Panel</span>
       </div>
       <div className='navbar-right'>
         {user && (
@@ -22,8 +23,9 @@ const Navbar = () => {
           appearance={{
             elements: {
               avatarBox: {
-                width: '40px',
-                height: '40px'
+                  width: '44px',
+                height: '44px',
+                borderRadius: '50%'
               }
             }
           }}

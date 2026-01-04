@@ -11,7 +11,9 @@ const LoginPopup = ({ setShowLogin }) => {
             <div className="login-popup-container clerk-container">
                 <div className="login-popup-title">
                     <h2>{currState === "Login" ? "Sign In" : "Sign Up"}</h2>
-                    <img onClick={() => setShowLogin(false)} src={assets.cross_icon} alt="" />
+                    <div className="close-icon" onClick={() => setShowLogin(false)}>
+                        ×
+                    </div>
                 </div>
                 
                 <div className="clerk-auth-wrapper">
@@ -22,9 +24,9 @@ const LoginPopup = ({ setShowLogin }) => {
                             appearance={{
                                 elements: {
                                     formButtonPrimary: {
-                                        backgroundColor: 'tomato',
+                                        backgroundColor: '#c9a668',
                                         '&:hover': {
-                                            backgroundColor: '#ff6347'
+                                            backgroundColor: '#b89558'
                                         }
                                     },
                                     card: {
@@ -38,21 +40,23 @@ const LoginPopup = ({ setShowLogin }) => {
                                         display: 'none'
                                     },
                                     socialButtonsBlockButton: {
-                                        border: '1px solid #d4d4d4',
+                                        border: '2px solid #e0e0e0',
                                         '&:hover': {
-                                            backgroundColor: '#f5f5f5'
+                                            backgroundColor: '#f8f8f8',
+                                            borderColor: '#c9a668'
                                         }
                                     },
                                     formFieldInput: {
-                                        border: '1px solid #c9c9c9',
+                                        border: '2px solid #e0e0e0',
                                         '&:focus': {
-                                            border: '1px solid tomato'
+                                           border: '2px solid #c9a668',
+                                            boxShadow: '0 0 0 3px rgba(201, 166, 104, 0.1)'
                                         }
                                     },
                                     footerActionLink: {
-                                        color: 'tomato',
+                                        color: '#c9a668',
                                         '&:hover': {
-                                            color: '#ff6347'
+                                            color: '#b89558'
                                         }
                                     }
                                 }
@@ -65,9 +69,9 @@ const LoginPopup = ({ setShowLogin }) => {
                             appearance={{
                                 elements: {
                                     formButtonPrimary: {
-                                        backgroundColor: 'tomato',
+                                        backgroundColor: '#c9a668',
                                         '&:hover': {
-                                            backgroundColor: '#ff6347'
+                                            backgroundColor: '#b89558'
                                         }
                                     },
                                     card: {
@@ -81,21 +85,23 @@ const LoginPopup = ({ setShowLogin }) => {
                                         display: 'none'
                                     },
                                     socialButtonsBlockButton: {
-                                        border: '1px solid #d4d4d4',
+                                        border: '2px solid #e0e0e0',
                                         '&:hover': {
-                                            backgroundColor: '#f5f5f5'
+                                            backgroundColor: '#f8f8f8',
+                                            borderColor: '#c9a668'
                                         }
                                     },
                                     formFieldInput: {
-                                        border: '1px solid #c9c9c9',
+                                       border: '2px solid #e0e0e0',
                                         '&:focus': {
-                                            border: '1px solid tomato'
+                                           border: '2px solid #c9a668',
+                                            boxShadow: '0 0 0 3px rgba(201, 166, 104, 0.1)'
                                         }
                                     },
                                     footerActionLink: {
-                                        color: 'tomato',
+                                      color: '#c9a668',
                                         '&:hover': {
-                                            color: '#ff6347'
+                                            color: '#b89558'
                                         }
                                     }
                                 }
@@ -117,3 +123,22 @@ const LoginPopup = ({ setShowLogin }) => {
 }
 
 export default LoginPopup
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

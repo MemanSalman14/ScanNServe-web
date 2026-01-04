@@ -29,6 +29,11 @@ const List = ({ url }) => {
       return;
     }
 
+      // Show confirmation dialog
+    if (!window.confirm("Are you sure you want to delete this item?")) {
+      return;
+    }
+
     try {
       const token = await getToken();
       
@@ -67,27 +72,40 @@ const List = ({ url }) => {
   }, [])
 
   return (
-    <div className='list add flex-col'>
-      <p>All Foods List</p>
-      <div className="list-table">
-        <div className="list-table-format title">
-          <b>Image</b>
-          <b>Name</b>
-          <b>Category</b>
-          <b>Price</b>
-          <b>Action</b>
-        </div>
-        {list.map((item, index) => {
-          return (
-            <div key={index} className='list-table-format'>
-              <img src={`data:image/png;base64,${item.image}`} alt={item.name} style={{ width: '40px', height: '40px', objectFit: 'cover' }} /> 
-              <p>{item.name}</p>
-              <p>{item.category}</p>
-              <p>₹{item.price}</p>
-              <p onClick={() => removeFood(item._id)} className='cursor'>X</p>
+    <div className='list-page'>
+      <div className='list-header'>
+        <h2>📋 All Foods List</h2>
+        <p>Manage your restaurant menu items</p>
+      </div>
+      <div className="list-table-container">
+        <div className="list-table">
+          <div className="list-table-format title">
+            <b>Image</b>
+            <b>Name</b>
+            <b>Category</b>
+            <b>Price</b>
+            <b>Action</b>
+          </div>
+          {list.length === 0 ? (
+            <div className="list-empty">
+              <p>No food items found. Add some items to get started!</p>
             </div>
-          )
-        })}
+          ) : (
+            list.map((item, index) => {
+              return (
+                <div key={index} className='list-table-format list-item'>
+                  <img src={`data:image/png;base64,${item.image}`} alt={item.name} /> 
+                  <p className='item-name'>{item.name}</p>
+                  <p className='item-category'>{item.category}</p>
+                  <p className='item-price'>₹{item.price}</p>
+                  <button onClick={() => removeFood(item._id)} className='delete-btn'>
+                    🗑️
+                  </button>
+                </div>
+              )
+            })
+          )}
+        </div>
       </div>
     </div>
   )

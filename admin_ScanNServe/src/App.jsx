@@ -52,7 +52,7 @@ const App = () => {
             <RoleCheck>
               <>
                 <Navbar />
-                <hr />
+               
                 <div className="app-content">
                   <Sidebar />
                   <Routes>
